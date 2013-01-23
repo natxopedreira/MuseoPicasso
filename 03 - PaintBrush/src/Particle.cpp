@@ -32,7 +32,7 @@ void Particle::update(){
         
         tail.push_back(newPoint);
         
-        if (tail.size() > 4){
+        if (tail.size() > 2){
             tail.erase(tail.begin());
         }
         
