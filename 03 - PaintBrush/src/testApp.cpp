@@ -14,18 +14,27 @@ void testApp::setup(){
     gui.add(brushRepRad.setup("repulsion_rad", 5, 0, 20));
     gui.add(brushRepPct.setup("repulsion_pct", 0.5, 0.0, 1.0));
     
-    gui.add(colorLerp.setup("color_Pallet_lerp", 0.5, 0.0, 1.0));
+    gui.add(colorLerp.setup("color_lerp", 0.5, 0.0, 1.0));
     gui.add(colorRandom.setup("color_random", 0.005, 0.0, 0.02));
     
     gui.loadFromFile("settings.xml");
+    
+    iconSize = 100;
     
     canvas.allocate(ofGetScreenWidth(), ofGetScreenHeight());
     canvas.begin();
     ofClear(0,0);
     canvas.end();
     
-    palette.loadPalette("palette.css");
+    palette.loadPalette("settings.xml");
     palette.setVisible(false);
+    
+    paletteBtn.set(0, 0, iconSize, iconSize);
+    paletteBtn.setImage("icon_pallete.png");
+    ofAddListener( paletteBtn.clickPressed, this, &testApp::showPalette );
+    cleanBtn.set(ofGetWidth()-iconSize,ofGetHeight()-iconSize,iconSize,iconSize);
+    ofAddListener( cleanBtn.clickPressed, this, &testApp::cleanCanvas );
+    cleanBtn.setImage("icon_close.png");
     
     bDebug  = false;
 }
@@ -53,15 +62,17 @@ void testApp::update(){
         }
     }
     
-    
     ofSetWindowTitle(ofToString(ofGetFrameRate()));
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-//    ofBackground(0);
+    ofBackground(0);
     
     canvas.draw(0, 0);
+    
+    paletteBtn.draw();
+    cleanBtn.draw();
     
     palette.draw();
     
@@ -79,16 +90,32 @@ void testApp::keyPressed(int key){
     if (key == 'd'){
         bDebug = !bDebug;
     } else if (key == ' '){
-        brush.clear();
-        canvas.begin();
-        ofClear(0,0);
-        canvas.end();
+        int n = 0;
+        cleanCanvas(n);
     } else if (key == 'f'){
         ofToggleFullscreen();
     } else if ( key == 'p'){
         brush.clear();
+        if (!palette.getVisible()){
+            palette.clear();
+        }
         palette.toggleVisible();
     }
+}
+
+void testApp::showPalette(int &_n){
+    if (!palette.getVisible()){
+        palette.clear();
+        brush.clear();
+        palette.setVisible(true);
+    }
+}
+
+void testApp::cleanCanvas(int &_n){
+    brush.clear();
+    canvas.begin();
+    ofClear(0,0);
+    canvas.end();
 }
 
 //--------------------------------------------------------------
@@ -111,23 +138,34 @@ void testApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
-    if (palette.getVisible()){
-        if (  mouseY > palette.getY() ){
-            brush.clear();
-            palette.setVisible(false);
+    ofPoint mouse(x,y);
+    
+    if ( !paletteBtn.checkOver(mouse) && !cleanBtn.checkOver(mouse) ){
+        
+   
+        if (palette.getVisible()){
+            if (  mouseY > palette.getY() ){
+                brush.clear();
+                palette.setVisible(false);
+            }
         }
+        
+        ofPoint mouse(mouseX,mouseY);
+        paletteBtn.checkOver(mouse);
+        cleanBtn.checkOver(mouse);
+        
+        brush.init(brushNumber);
+        brush.setWidth(brushWidth);
+        
+        brush.damp = brushDamp;
+        brush.k = brushK;
+        brush.repPct = brushRepPct;
+        brush.repRad = brushRepRad;
+        
+        brush.begin();
+        brush.set(x,y);
+        
     }
-    
-    brush.init(brushNumber);
-    brush.setWidth(brushWidth);
-    
-    brush.damp = brushDamp;
-    brush.k = brushK;
-    brush.repPct = brushRepPct;
-    brush.repRad = brushRepRad;
-    
-    brush.begin();
-    brush.set(x,y);
 }
 
 //--------------------------------------------------------------
@@ -138,6 +176,7 @@ void testApp::mouseReleased(int x, int y, int button){
 
 //--------------------------------------------------------------
 void testApp::windowResized(int w, int h){
+    cleanBtn.set(w-iconSize,h-iconSize,iconSize,iconSize);
     
 }
 

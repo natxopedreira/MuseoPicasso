@@ -19,27 +19,34 @@ Palette::Palette(){
     
 }
 
-void Palette::loadPalette(string _sFile){
+bool Palette::loadPalette(string _sFile){
     
-    ofColor color;
-    color.set(255);
-    colors.push_back(color);
-    color.set(255,0,0);
-    colors.push_back(color);
-    color.set(0,255,0);
-    colors.push_back(color);
-    color.set(0,0,255);
-    colors.push_back(color);
-    color.set(0);
-    colors.push_back(color);
+    bool success = false;
     
-    ofImage image;
-    image.loadImage("01.png");
-    images.push_back(image);
-    image.loadImage("02.png");
-    images.push_back(image);
-    image.loadImage("03.png");
-    images.push_back(image);
+    ofxXmlSettings XML;
+    
+    if ( XML.loadFile(_sFile)){
+        if ( XML.pushTag("palette")) {
+            
+            height = XML.getValue("height", height);
+            
+            for (int i = 0; i < XML.getNumTags("img"); i++){
+                ofImage image;
+                if ( image.loadImage( XML.getValue("img", "01.png", i ) ) ){
+                    images.push_back(image);
+                }
+            }
+            
+            for (int i = 0; i < XML.getNumTags("color"); i++){
+                string hexString = XML.getValue("color", "ee1b12", i );
+                int hexInt = ofHexToInt( hexString );
+                
+                ofColor color;
+                color.setHex( hexInt );
+                colors.push_back(color);
+            }
+        }
+    }
 }
 
 void Palette::setVisible(bool _bVisible){

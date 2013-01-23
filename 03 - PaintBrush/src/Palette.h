@@ -10,12 +10,14 @@
 
 #include "ofMain.h"
 
+#include "ofxXmlSettings.h"
+
 class Palette : public ofFbo {
 public:
     
     Palette();
     
-    void        loadPalette(string _sFile);
+    bool        loadPalette(string _sFile);
     void        setVisible(bool _bvisible);
     void        toggleVisible();
     

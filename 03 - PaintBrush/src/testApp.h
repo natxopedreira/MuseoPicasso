@@ -9,6 +9,7 @@
 
 #include "Brush.h"
 #include "Palette.h"
+#include "Button.h"
 
 //  Reference:
 //              http://www.youtube.com/watch?v=ow7eEWh37iU
@@ -30,6 +31,9 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
+    
+    void showPalette(int &_n );
+    void cleanCanvas(int &_n );
 
     //  GUI
     //
@@ -47,6 +51,11 @@ public:
     ofFbo           canvas;
     
     Palette         palette;
+    
+    SimpleBtn       paletteBtn;
+    SimpleBtn       cleanBtn;
+
+    int             iconSize;
     
     bool            bDebug;
 };
