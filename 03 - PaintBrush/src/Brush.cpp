@@ -217,10 +217,14 @@ void Brush::draw(){
         if (tail.size() < 10){
             ofPushStyle();
             ofSetColor(Bs[i]->color);
-            ofCircle( *Bs[i], ofMap(10-Bs[i]->tail.size(),0,10,0,3));
+            glLineWidth( ofMap(10-Bs[i]->tail.size(),0,10,0,5) );
+            Bs[i]->trail.draw();
             ofPopStyle();
         }
+        ofPushStyle();
+        glLineWidth( 2 );
         Bs[i]->trail.draw();
+        ofPopStyle();
     }
     
     ofPopStyle();
