@@ -10,20 +10,35 @@
 
 #include "ofMain.h"
 
-class Palette : public ofRectangle {
+class Palette : public ofFbo {
 public:
     
-    void        load(string _sFile);
-    void        setVisible(bool _bvisible);
+    Palette();
     
-    ofTexture&  getTextureReference();
-    bool        isVisible();
+    void        loadPalette(string _sFile);
+    void        setVisible(bool _bvisible);
+    void        toggleVisible();
+    
+    void        clear();
+    
+    bool        getVisible();
+    float       getY();
     
     void        update();
     void        draw();
     
 private:
-    float       pct;
+    
+    ofImage         background;
+    
+    vector<ofImage> images;
+    vector<ofColor> colors;
+    float           pct, inc, shp;
+    
+    bool            bSetup;
+    bool            bVisible;
+    
+    int             width,height;
 };
 
 #endif

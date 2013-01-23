@@ -25,20 +25,14 @@ void Particle::update(){
         vel *= 1.0f - damping;
         *this += vel;
         
-        float alpha = 1.0 - ofMap( vel.length(), 0.0,80.0, 0.0 ,1.0, true );
-
-//        trail.addColor(color);
-//        trail.addVertex(*this);
-//        trail.addTexCoord(ofVec2f(*this));
-        
         pPoint newPoint;
         newPoint.pos = *this;
         newPoint.color = color;
-        newPoint.color.a = alpha;
+        newPoint.color.a = ofMap( vel.length(), 0.0,80.0, 1.0 ,0.0, true );
         
         tail.push_back(newPoint);
         
-        if (tail.size() > 10){
+        if (tail.size() > 2){
             tail.erase(tail.begin());
         }
         

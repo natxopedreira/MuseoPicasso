@@ -14,8 +14,7 @@ void testApp::setup(){
     gui.add(brushRepRad.setup("repulsion_rad", 5, 0, 20));
     gui.add(brushRepPct.setup("repulsion_pct", 0.5, 0.0, 1.0));
     
-    gui.add(colorPalleteLerp.setup("color_Pallet_lerp", 0.5, 0.0, 1.0));
-    gui.add(colorCanvasLerp.setup("color_Canvas_lerp", 0.1, 0.0, 1.0));
+    gui.add(colorLerp.setup("color_Pallet_lerp", 0.5, 0.0, 1.0));
     gui.add(colorRandom.setup("color_random", 0.005, 0.0, 0.02));
     
     gui.loadFromFile("settings.xml");
@@ -25,58 +24,46 @@ void testApp::setup(){
     ofClear(0,0);
     canvas.end();
     
-    width = ofGetScreenWidth();
-    height = 200;
-    
-    palleteImg.loadImage("pallete.png");
-    
-    pallete.allocate(width, height);
-    pallete.begin();
-    ofClear(0, 0);
-    ofSetColor(255);
-    palleteImg.draw(0, 0, width, height);
-    
-    pallete.end();
+    palette.loadPalette("palette.css");
+    palette.setVisible(false);
     
     bDebug  = false;
-    bPallete= true;
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
     brush.update();
+    palette.update();
 
     canvas.begin();
-    if (bPallete){
-        if (mouseY > height){
+    if ( palette.getVisible() ){
+        if ( mouseY > palette.getY() ){
             brush.draw();
-            
         }
     } else {
         brush.draw();
     }
     canvas.end();
     
-    if (bPallete){
-        pallete.begin();
-        
-        brush.draw();
-        
-        pallete.end();
+    if ( palette.getVisible() ){
+        if ( mouseY < palette.getY() ){
+            palette.begin();
+            brush.draw();
+            palette.end();
+        }
     }
+    
     
     ofSetWindowTitle(ofToString(ofGetFrameRate()));
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-    ofBackground(0);
+//    ofBackground(0);
     
     canvas.draw(0, 0);
     
-    if (bPallete){
-        pallete.draw(0, 0);
-    }
+    palette.draw();
     
     if (bDebug){
         ofSetColor(255);
@@ -99,15 +86,8 @@ void testApp::keyPressed(int key){
     } else if (key == 'f'){
         ofToggleFullscreen();
     } else if ( key == 'p'){
-        bPallete = !bPallete;
-        
-        pallete.begin();
-        ofClear(0, 0);
-        ofSetColor(255);
-        palleteImg.draw(0, 0, width, height);
-        pallete.end();
-        
         brush.clear();
+        palette.toggleVisible();
     }
 }
 
@@ -122,21 +102,19 @@ void testApp::mouseMoved(int x, int y ){
 
 //--------------------------------------------------------------
 void testApp::mouseDragged(int x, int y, int button){
-    if (bPallete){
-        brush.pickColorFrom( pallete.getTextureReference(),colorPalleteLerp,colorRandom );
-    } else {
-        brush.pickColorFrom( canvas.getTextureReference(),colorCanvasLerp,colorRandom );
-    }
+    if ( palette.getVisible() ){
+        brush.pickColorFrom( palette.getTextureReference(),colorLerp,colorRandom );
+    } 
     
     brush.set(x,y);
 }
 
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
-    if (bPallete){
-        if (mouseY > height){
+    if (palette.getVisible()){
+        if (  mouseY > palette.getY() ){
             brush.clear();
-            bPallete = false;
+            palette.setVisible(false);
         }
     }
     
@@ -161,11 +139,6 @@ void testApp::mouseReleased(int x, int y, int button){
 //--------------------------------------------------------------
 void testApp::windowResized(int w, int h){
     
-    pallete.begin();
-    ofClear(0, 0);
-    ofSetColor(255);
-    palleteImg.draw(0, 0, ofGetWindowWidth(), height);
-    pallete.end();
 }
 
 //--------------------------------------------------------------

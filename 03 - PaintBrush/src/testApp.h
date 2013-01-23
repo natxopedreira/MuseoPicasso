@@ -8,6 +8,7 @@
 #include "ofxFX.h"
 
 #include "Brush.h"
+#include "Palette.h"
 
 //  Reference:
 //              http://www.youtube.com/watch?v=ow7eEWh37iU
@@ -39,18 +40,13 @@ public:
     ofxFloatSlider  brushK;
     ofxFloatSlider  brushRepRad;
     ofxFloatSlider  brushRepPct;
-    ofxFloatSlider  colorPalleteLerp;
-    ofxFloatSlider  colorCanvasLerp;
+    ofxFloatSlider  colorLerp;
     ofxFloatSlider  colorRandom;
 
     Brush           brush;
     ofFbo           canvas;
     
-    ofFbo           pallete;
-    ofImage         palleteImg;
-    
-    int             width, height;
+    Palette         palette;
     
     bool            bDebug;
-    bool            bPallete;
 };

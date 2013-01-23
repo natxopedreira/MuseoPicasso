@@ -10,3 +10,6 @@
 <noise_zoom>10.000000000</noise_zoom>
 <noise_strenght>200</noise_strenght>
 <blur_radius>10.000000000</blur_radius>
+<color_Pallet_lerp>0.514999986</color_Pallet_lerp>
+<color_Canvas_lerp>0.010000000</color_Canvas_lerp>
+<color_random>0.005000000</color_random>
