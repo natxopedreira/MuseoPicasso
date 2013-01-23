@@ -32,7 +32,7 @@ void Brush::init(int _numSprings){
     float step = width/(float)_numSprings;
     
     while ( _numSprings > colors.size() ){
-        colors.push_back(ofFloatColor(0,0) );
+        colors.push_back(ofFloatColor(1.0,1.0) );
     }
     
     ofPoint top;
