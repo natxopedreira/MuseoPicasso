@@ -8,7 +8,7 @@
 #include "ofxFX.h"
 
 #include "Brush.h"
-#include "Palette.h"
+#include "ColorPalette.h"
 #include "Button.h"
 
 //  Reference:
@@ -51,7 +51,7 @@ public:
     Brush           brush;
     ofFbo           canvas;
     
-    Palette         palette;
+    ColorPalette    palette;
     
     SimpleBtn       paletteBtn;
     SimpleBtn       cleanBtn;

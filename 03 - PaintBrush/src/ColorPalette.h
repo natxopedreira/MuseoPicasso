@@ -12,10 +12,10 @@
 
 #include "ofxXmlSettings.h"
 
-class Palette : public ofFbo {
+class ColorPalette : public ofFbo {
 public:
     
-    Palette();
+    ColorPalette();
     
     bool        loadPalette(string _sFile);
     void        setVisible(bool _bvisible);

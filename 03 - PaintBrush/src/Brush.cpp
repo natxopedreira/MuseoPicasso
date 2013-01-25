@@ -241,6 +241,7 @@ void Brush::drawDebug(){
     
     ofSetColor(255, 0, 0);
     ofLine(a, b);
+    
 //    ofSetColor(255, 0, 255);
 //    tail.draw();
     

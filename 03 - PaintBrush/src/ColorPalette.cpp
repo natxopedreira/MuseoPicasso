@@ -1,13 +1,13 @@
 //
-//  Palette.cpp
+//  ColorPalette.cpp
 //
 //  Created by Patricio Gonzalez Vivo on 1/21/13.
 //
 //
 
-#include "Palette.h"
+#include "ColorPalette.h"
 
-Palette::Palette(){
+ColorPalette::ColorPalette(){
     bSetup = false;
     bVisible = false;
     
@@ -19,7 +19,7 @@ Palette::Palette(){
     
 }
 
-bool Palette::loadPalette(string _sFile){
+bool ColorPalette::loadPalette(string _sFile){
     
     bool success = false;
     
@@ -49,15 +49,15 @@ bool Palette::loadPalette(string _sFile){
     }
 }
 
-void Palette::setVisible(bool _bVisible){
+void ColorPalette::setVisible(bool _bVisible){
     bVisible = _bVisible;
 }
 
-void Palette::toggleVisible(){
+void ColorPalette::toggleVisible(){
     bVisible = !bVisible;
 }
 
-bool Palette::getVisible(){
+bool ColorPalette::getVisible(){
     if (pct >= 0.9){
         return true;
     } else {
@@ -65,12 +65,12 @@ bool Palette::getVisible(){
     }
 }
 
-float Palette::getY(){
+float ColorPalette::getY(){
     float yPct = powf(pct, shp);
     return yPct * height;
 }
 
-void Palette::update(){
+void ColorPalette::update(){
     if ( width != ofGetWindowWidth()){
         bSetup = false;
     }
@@ -96,7 +96,7 @@ void Palette::update(){
     }
 }
 
-void Palette::clear(){
+void ColorPalette::clear(){
     //  Construct FBO with colors;
     //
     ofPushStyle();
@@ -114,7 +114,7 @@ void Palette::clear(){
     ofPopStyle();
 }
 
-void Palette::draw(){
+void ColorPalette::draw(){
     if ( pct > 0.0 ){
         background.draw(0, -background.getHeight() + getY());
         ofFbo::draw(0, -height + getY());

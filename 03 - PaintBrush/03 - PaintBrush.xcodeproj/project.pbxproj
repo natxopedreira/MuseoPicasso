@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1cd33e884d9e3358252e82a14dc97644 /* ofxToggle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 907c5b5e104864a2d3a2574573796b13 /* ofxToggle.cpp */; };
-		1d071a77ae32d3adc4e21c38264125e4 /* Palette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ab92ca0626f5e7d0f565d7d3d4ea3410 /* Palette.cpp */; };
+		1d071a77ae32d3adc4e21c38264125e4 /* ColorPalette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ab92ca0626f5e7d0f565d7d3d4ea3410 /* ColorPalette.cpp */; };
 		375b8c5b419d8c3a250c8b43c9fb5c80 /* ofxFluid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = e03c3575d9d98939012df8f7a5b13ac5 /* ofxFluid.cpp */; };
 		3D68665A16AF6B840001E6D2 /* Button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D68665816AF6B840001E6D2 /* Button.cpp */; };
 		483908258d00b98b4be69f0765fb3433 /* ofxLabel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 78d67a00eb899fac0943059784f8212a /* ofxLabel.cpp */; };
@@ -152,7 +152,7 @@
 		E7E077E715D3B6510020DFD4 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		E7F985F515E0DE99003869B5 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = /System/Library/Frameworks/Accelerate.framework; sourceTree = "<absolute>"; };
 		a29b5979920270a212a4c61c33b1721f /* ofxKaleidoscope.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxKaleidoscope.h; path = ../../../addons/ofxFX/src/transformers/ofxKaleidoscope.h; sourceTree = SOURCE_ROOT; };
-		ab92ca0626f5e7d0f565d7d3d4ea3410 /* Palette.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Palette.cpp; path = src/Palette.cpp; sourceTree = SOURCE_ROOT; };
+		ab92ca0626f5e7d0f565d7d3d4ea3410 /* ColorPalette.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ColorPalette.cpp; path = src/ColorPalette.cpp; sourceTree = SOURCE_ROOT; };
 		ace80ef2fe2f3d0a2ed1a8247ef827b2 /* ofxTint.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxTint.h; path = ../../../addons/ofxFX/src/generative/ofxTint.h; sourceTree = SOURCE_ROOT; };
 		b21e7e5f548eea92f368040bb1aa2f69 /* tinyxml.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = tinyxml.h; path = ../../../addons/ofxXmlSettings/libs/tinyxml.h; sourceTree = SOURCE_ROOT; };
 		b2311a009b3e782884bbd59f3fc5b3be /* ofxBloom.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxBloom.h; path = ../../../addons/ofxFX/src/filters/ofxBloom.h; sourceTree = SOURCE_ROOT; };
@@ -164,7 +164,7 @@
 		db11a57192ba5fd28a320624b26154bc /* ofxFluid.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxFluid.h; path = ../../../addons/ofxFX/src/interactive/ofxFluid.h; sourceTree = SOURCE_ROOT; };
 		e03c3575d9d98939012df8f7a5b13ac5 /* ofxFluid.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxFluid.cpp; path = ../../../addons/ofxFX/src/interactive/ofxFluid.cpp; sourceTree = SOURCE_ROOT; };
 		e112b3aebea2c091bf2b40ae5771826d /* ofxPanel.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxPanel.cpp; path = ../../../addons/ofxGui/src/ofxPanel.cpp; sourceTree = SOURCE_ROOT; };
-		e4fe78743843f0d2c950f1f966e5bd2c /* Palette.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Palette.h; path = src/Palette.h; sourceTree = SOURCE_ROOT; };
+		e4fe78743843f0d2c950f1f966e5bd2c /* ColorPalette.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ColorPalette.h; path = src/ColorPalette.h; sourceTree = SOURCE_ROOT; };
 		e9aa5fd1edf04cd1f5fb1686f10b85a9 /* Particle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Particle.cpp; path = src/Particle.cpp; sourceTree = SOURCE_ROOT; };
 		f6b3a9948f5a31ea1e25a937c2b02670 /* Brush.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Brush.cpp; path = src/Brush.cpp; sourceTree = SOURCE_ROOT; };
 		fc2f26dc5662161c7db2ecd7a5a6d5b4 /* ofOscParameter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofOscParameter.h; path = ../../../addons/ofxGui/src/ofOscParameter.h; sourceTree = SOURCE_ROOT; };
@@ -269,8 +269,8 @@
 		3D3F1AE616AEE3FD00F284B7 /* Gui */ = {
 			isa = PBXGroup;
 			children = (
-				e4fe78743843f0d2c950f1f966e5bd2c /* Palette.h */,
-				ab92ca0626f5e7d0f565d7d3d4ea3410 /* Palette.cpp */,
+				e4fe78743843f0d2c950f1f966e5bd2c /* ColorPalette.h */,
+				ab92ca0626f5e7d0f565d7d3d4ea3410 /* ColorPalette.cpp */,
 				3D68665916AF6B840001E6D2 /* Button.h */,
 				3D68665816AF6B840001E6D2 /* Button.cpp */,
 			);
@@ -561,7 +561,7 @@
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* testApp.cpp in Sources */,
 				c0443c3de7d1d44767e490775181533a /* Brush.cpp in Sources */,
-				1d071a77ae32d3adc4e21c38264125e4 /* Palette.cpp in Sources */,
+				1d071a77ae32d3adc4e21c38264125e4 /* ColorPalette.cpp in Sources */,
 				c6792cbaaa54d5a713d25adf169b5131 /* Particle.cpp in Sources */,
 				4ef03083ac2ac7a282276d0ccc52dee5 /* Spring.cpp in Sources */,
 				4e08503ca9b585e259b787c36b1b6d50 /* ofxFlocking.cpp in Sources */,
