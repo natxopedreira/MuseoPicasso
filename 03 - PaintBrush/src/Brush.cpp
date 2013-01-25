@@ -9,7 +9,9 @@
 #include "Brush.h"
 
 Brush::Brush(){
-    width = 50;
+    brushWidth = 50;
+    lineWidth = 1;
+    
     bDown = false;
     
     damp = 0.1;
@@ -18,29 +20,33 @@ Brush::Brush(){
     repRad = 5.0;
 }
 
-void Brush::setWidth(float _width){
-    width = _width;
+void Brush::setBrushWidth(float _width){
+    brushWidth = _width;
     
     int n = springs.size();
     
     init(n);
 }
 
+void Brush::setLineWidth(float _width){
+    lineWidth = _width;
+}
+
 void Brush::init(int _numSprings){
     
     float angle = getAngle() + HALF_PI;
-    float step = width/(float)_numSprings;
+    float step = brushWidth/(float)_numSprings;
     
     while ( _numSprings > colors.size() ){
         colors.push_back(ofFloatColor(1.0,1.0) );
     }
     
     ofPoint top;
-    top.x = x + cos(angle) * width*0.5;
-    top.y = y + sin(angle) * width*0.5;
+    top.x = x + cos(angle) * brushWidth*0.5;
+    top.y = y + sin(angle) * brushWidth*0.5;
     ofPoint buttom;
-    buttom.x = x + cos(angle+PI) * width*0.5;
-    buttom.y = y + sin(angle+PI) * width*0.5;
+    buttom.x = x + cos(angle+PI) * brushWidth*0.5;
+    buttom.y = y + sin(angle+PI) * brushWidth*0.5;
     
     ofPoint diff = buttom - top;
     diff.normalize();
@@ -62,7 +68,7 @@ void Brush::init(int _numSprings){
         As.push_back(a);
         
         Particle *b = new Particle();
-        b->set( ofPoint(x+ofRandom(-width*0.5,width*0.5), y+ofRandom(-width*0.5,width*0.5) ) );
+        b->set( ofPoint(x+ofRandom(-brushWidth*0.5,brushWidth*0.5), y+ofRandom(-brushWidth*0.5,brushWidth*0.5) ) );
         b->size = step;
         b->damping = damp;
         b->bFixed = false;
@@ -132,14 +138,14 @@ void Brush::set(ofPoint _pos){
             //  FLAT BRUSH
             //
             float angle = getAngle() + HALF_PI;
-            float step = width/(float)As.size();
+            float step = brushWidth/(float)As.size();
             
             ofPoint top;
-            top.x = x + cos(angle) * width*0.5;
-            top.y = y + sin(angle) * width*0.5;
+            top.x = x + cos(angle) * brushWidth*0.5;
+            top.y = y + sin(angle) * brushWidth*0.5;
             ofPoint buttom;
-            buttom.x = x + cos(angle+PI) * width*0.5;
-            buttom.y = y + sin(angle+PI) * width*0.5;
+            buttom.x = x + cos(angle+PI) * brushWidth*0.5;
+            buttom.y = y + sin(angle+PI) * brushWidth*0.5;
             
             ofPoint diff = buttom - top;
             diff.normalize();
@@ -148,21 +154,6 @@ void Brush::set(ofPoint _pos){
             for(int i = 0; i < As.size(); i++){
                 As[i]->set( top + diff * i );
             }
-            
-            //  CIRCULAR BRUSH
-            //
-//            ofPolyline positions;
-//            positions.arc(*this, height*0.5, height*0.5, 0, 360, true, As.size()/2);
-//            
-//            for(int i = 0; i < As.size()/2; i++){
-//                As[i]->set( positions.getVertices()[i] );
-//            }
-//            
-//            positions.arc(*this, height, height, 0, 360, true, As.size()/2);
-//            for(int i = 0; i < As.size()/2; i++){
-//                As[As.size()/2+i]->set( positions.getVertices()[i] );
-//            }
-            
         }
     }
 }
@@ -212,17 +203,17 @@ void Brush::update(){
 
 void Brush::draw(){
     ofPushStyle();
-//    ofSetColor(color);
+    
     for(int i = 0; i < springs.size(); i++){
-        if (tail.size() < 10){
+        if (tail.size() < 5){
             ofPushStyle();
             ofSetColor(Bs[i]->color);
-            glLineWidth( ofMap(10-Bs[i]->tail.size(),0,10,0,5) );
+            glLineWidth( ofMap(lineWidth+5-Bs[i]->tail.size(),0,5,lineWidth,lineWidth+5) );
             Bs[i]->trail.draw();
             ofPopStyle();
         }
         ofPushStyle();
-        glLineWidth( 2 );
+        glLineWidth( lineWidth );
         Bs[i]->trail.draw();
         ofPopStyle();
     }
@@ -242,11 +233,11 @@ void Brush::drawDebug(){
     
     float angle = getAngle() + HALF_PI;
     ofPoint a;
-    a.x = x + cos(angle) * width*0.5;
-    a.y = y + sin(angle) * width*0.5;
+    a.x = x + cos(angle) * brushWidth*0.5;
+    a.y = y + sin(angle) * brushWidth*0.5;
     ofPoint b;
-    b.x = x + cos(angle+PI) * width*0.5;
-    b.y = y + sin(angle+PI) * width*0.5;
+    b.x = x + cos(angle+PI) * brushWidth*0.5;
+    b.y = y + sin(angle+PI) * brushWidth*0.5;
     
     ofSetColor(255, 0, 0);
     ofLine(a, b);

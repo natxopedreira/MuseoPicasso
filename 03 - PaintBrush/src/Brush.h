@@ -22,7 +22,8 @@ public:
     
     void    init(int _numSprings);
     
-    void    setWidth(float _width);
+    void    setBrushWidth(float _width);
+    void    setLineWidth(float _width);
     void    pickColorFrom(ofTexture &Text, float _lerpAmount, float _randAmount);
     
     void    set(int _x, int _y);
@@ -56,7 +57,8 @@ private:
     
     ofPoint             prevPos;
     
-    float               width;
+    float               brushWidth;
+    float               lineWidth;
 };
 
 #endif

@@ -44,6 +44,7 @@ public:
     ofxFloatSlider  brushK;
     ofxFloatSlider  brushRepRad;
     ofxFloatSlider  brushRepPct;
+    ofxFloatSlider  lineWidth;
     ofxFloatSlider  colorLerp;
     ofxFloatSlider  colorRandom;
 

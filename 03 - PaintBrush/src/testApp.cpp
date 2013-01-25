@@ -6,8 +6,10 @@ void testApp::setup(){
     ofEnableAlphaBlending();
     
     gui.setup("brush");
-    gui.add(brushWidth.setup("width",25,0,50));
-    gui.add(brushNumber.setup("number",10,1,50));
+    gui.add(brushWidth.setup("brush_width",25,0,50));
+    gui.add(brushNumber.setup("number_of_lines",10,1,50));
+    gui.add(lineWidth.setup("line_width", 2, 1,10));
+            
     gui.add(brushDamp.setup("damp",0.245,0.0,0.5));
     gui.add(brushK.setup("k",0.0825,0.0,0.5));
     
@@ -155,7 +157,8 @@ void testApp::mousePressed(int x, int y, int button){
         cleanBtn.checkOver(mouse);
         
         brush.init(brushNumber);
-        brush.setWidth(brushWidth);
+        brush.setBrushWidth(brushWidth);
+        brush.setLineWidth(lineWidth);
         
         brush.damp = brushDamp;
         brush.k = brushK;
