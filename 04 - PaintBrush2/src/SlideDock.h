@@ -9,10 +9,9 @@
 #define SLIDEDOCK
 
 #include "ofMain.h"
-
 #include "ofxXmlSettings.h"
 
-class SlideDock : public ofFbo {
+class SlideDock {
 public:
     
     SlideDock();
