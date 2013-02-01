@@ -31,7 +31,7 @@ void testApp::setup(){
     palette.loadPalette("settings.xml");
     palette.setVisible(false);
     
-    paletteBtn.set(0, 0, iconSize, iconSize);
+    paletteBtn.set(0, 0, iconSize+30, iconSize+30);
     paletteBtn.setImage("icon_pallete.png");
     ofAddListener( paletteBtn.clickPressed, this, &testApp::showPalette );
     cleanBtn.set(ofGetWidth()-iconSize,ofGetHeight()-iconSize,iconSize,iconSize);
@@ -142,9 +142,8 @@ void testApp::mouseDragged(int x, int y, int button){
 void testApp::mousePressed(int x, int y, int button){
     ofPoint mouse(x,y);
     
-    if ( !paletteBtn.checkOver(mouse) && !cleanBtn.checkOver(mouse) ){
+    if ( !cleanBtn.checkOver(mouse) && !paletteBtn.checkOver(mouse)){
         
-   
         if (palette.getVisible()){
             if (  mouseY > palette.getY() ){
                 brush.clear();
@@ -167,7 +166,6 @@ void testApp::mousePressed(int x, int y, int button){
         
         brush.begin();
         brush.set(x,y);
-        
     }
 }
 

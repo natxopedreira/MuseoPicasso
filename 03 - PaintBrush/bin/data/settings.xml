@@ -1,5 +1,6 @@
-<width>25</width>
-<number>50</number>
+<brush_width>25</brush_width>
+<number_of_lines>34</number_of_lines>
+<line_width>3.204999924</line_width>
 <damp>0.245000005</damp>
 <softness>0.357499987</softness>
 <height>10.000000000</height>
@@ -9,6 +10,7 @@
 <repulsion_pct>1.000000000</repulsion_pct>
 <color_lerp>0.514999986</color_lerp>
 <color_random>0.002100000</color_random>
+
 <palette>
     <height>250</height>
     <img>01.png</img>
@@ -26,6 +28,4 @@
     <color>ffffff</color>
     <color>000000</color>
 </palette>
-<brush_width>25</brush_width>
-<number_of_lines>34</number_of_lines>
-<line_width>3.204999924</line_width>
+
