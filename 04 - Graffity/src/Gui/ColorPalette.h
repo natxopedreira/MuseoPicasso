@@ -25,6 +25,7 @@ public:
     
     bool        getVisible();
     float       getY();
+    bool        checkColor(ofPoint _pos, ofColor& _color);
     
     void        update();
     void        draw();
@@ -34,8 +35,10 @@ private:
     ofImage         background;
     
     vector<ofImage> images;
+    vector<ofImage> imagesTop;
     vector<ofColor> colors;
     float           pct, inc, shp;
+    float           margins;
     
     bool            bSetup;
     bool            bVisible;

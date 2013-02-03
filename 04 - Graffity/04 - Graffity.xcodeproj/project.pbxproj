@@ -240,8 +240,8 @@
 			children = (
 				b04d25f858ce58e0cbe7d72c92f762d6 /* Button.h */,
 				2b80889f9ff74a1c00996018456c6f35 /* Button.cpp */,
-				47387b9bdd3c9cc2c5aec8eb7ee9c319 /* ColorPalette.cpp */,
 				b1d8c82292fd21080906cf8c0224cccf /* ColorPalette.h */,
+				47387b9bdd3c9cc2c5aec8eb7ee9c319 /* ColorPalette.cpp */,
 			);
 			name = Gui;
 			sourceTree = "<group>";

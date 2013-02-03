@@ -34,9 +34,11 @@ void testApp::setup(){
     canvas.allocate(width,height, GL_RGBA);
     stencilBuffer.allocate(width,height, GL_RGBA);
     
-//    paletteBtn.set(0, 0, iconSize+30, iconSize+30);
-//    paletteBtn.setImage("icon_pallete.png");
-//    ofAddListener( paletteBtn.clickPressed, this, &testApp::showPalette );
+    palette.loadPalette("settings.xml");
+    palette.setVisible(false);
+    paletteBtn.set(0, 0, iconSize+30, iconSize+30);
+    paletteBtn.setImage("icon_palette.png");
+    ofAddListener( paletteBtn.clickPressed, this, &testApp::showPalette );
     
     cleanBtn.set(ofGetWidth()-iconSize,ofGetHeight()-iconSize,iconSize,iconSize);
     ofAddListener( cleanBtn.clickPressed, this, &testApp::cleanCanvas );
@@ -51,6 +53,7 @@ void testApp::setup(){
 void testApp::update(){
     tuioClient.getMessage();
     spray.update();
+    palette.update();
     
     //  Draw Canvas
     //
@@ -106,7 +109,10 @@ void testApp::draw(){
         stencils[i]->drawGui();
     }
     
+    paletteBtn.draw();
     cleanBtn.draw();
+    
+    palette.draw();
     
     
 }
@@ -125,15 +131,18 @@ void testApp::keyPressed(int key){
 
 void testApp::mousePressed(int x, int y, int button) {
     ofPoint loc(x,y);
-    if ( !cleanBtn.checkOver(loc)){
+    if ( !cleanBtn.checkOver(loc) && !paletteBtn.checkOver(loc)){
         
-        for (int i = 0; i < stencils.size(); i++) {
-            if ( stencils[i]->checkClick(ofPoint(x,y) ) ){
-                return;
+        if ( !palette.checkColor(loc, spray.paintColor)){
+            
+            for (int i = 0; i < stencils.size(); i++) {
+                if ( stencils[i]->checkClick(ofPoint(x,y) ) ){
+                    return;
+                }
             }
+            
+            spray.addPaint(loc);
         }
-        
-        spray.addPaint(loc);
     }
 }
 
@@ -141,13 +150,16 @@ void testApp::mouseDragged(int x, int y, int button){
     
     //  Check Stencils
     //
-    for (int i = 0; i < stencils.size(); i++) {
-        if ( stencils[i]->checkClick(ofPoint(x,y) ) ){
-            return;
-        }
-    }
     
-    spray.addPaint( ofPoint(x,y) );
+    if ( !palette.checkColor(ofPoint(x,y), spray.paintColor)){
+        for (int i = 0; i < stencils.size(); i++) {
+            if ( stencils[i]->checkClick(ofPoint(x,y) ) ){
+                return;
+            }
+        }
+        
+        spray.addPaint( ofPoint(x,y) );
+    }
 }
 
 void testApp::mouseReleased(){
