@@ -15,24 +15,24 @@ void testApp::setup(){
 	ofAddListener(tuioClient.cursorRemoved,this,&testApp::_tuioRemoved);
 	ofAddListener(tuioClient.cursorUpdated,this,&testApp::_tuioUpdated);
 	tuioClient.start(3333);
-    
-    string stencilFragShader = STRINGIFY(uniform sampler2DRect imageTex;
-                                         uniform sampler2DRect stencilTex;
-                                         
-                                         void main (void){
-                                             vec2 st = gl_TexCoord[0].st;
-                                             vec4 image = texture2DRect(imageTex, st);
-                                             vec4 stencil = texture2DRect(stencilTex, st);
-                                             
-                                             float alpha = 1.0 - max(stencil.r,max(stencil.g,stencil.b));
-                                             gl_FragColor = vec4(image.rgb, min(alpha,image.a));
-                                         } );
-    
-    stencilShader.setupShaderFromSource(GL_FRAGMENT_SHADER, stencilFragShader);
-    stencilShader.linkProgram();
+//    
+//    string stencilFragShader = STRINGIFY(uniform sampler2DRect imageTex;
+//                                         uniform sampler2DRect stencilTex;
+//                                         
+//                                         void main (void){
+//                                             vec2 st = gl_TexCoord[0].st;
+//                                             vec4 image = texture2DRect(imageTex, st);
+//                                             vec4 stencil = texture2DRect(stencilTex, st);
+//                                             
+//                                             float alpha = 1.0 - max(stencil.r,max(stencil.g,stencil.b));
+//                                             gl_FragColor = vec4(image.rgb, min(alpha,image.a));
+//                                         } );
+//    
+//    stencilShader.setupShaderFromSource(GL_FRAGMENT_SHADER, stencilFragShader);
+//    stencilShader.linkProgram();
     
     canvas.allocate(width,height, GL_RGBA);
-    stencilBuffer.allocate(width,height, GL_RGBA);
+//    stencilBuffer.allocate(width,height, GL_RGBA);
     
     palette.loadPalette("settings.xml");
     palette.setVisible(false);
@@ -44,9 +44,9 @@ void testApp::setup(){
     ofAddListener( cleanBtn.clickPressed, this, &testApp::cleanCanvas );
     cleanBtn.setImage("icon_close.png");
     
-    stencilIdCounter = 0;
+    //stencilIdCounter = 0;
     
-    addStencil(stencilIdCounter);
+    //addStencil(stencilIdCounter);
 }
 
 //--------------------------------------------------------------
@@ -65,35 +65,35 @@ void testApp::update(){
     canvas.setBlendMode( BLEND_NORMAL );
     canvas.update();
     
-    //  Stencil Mask
-    //
-    stencilBuffer.src->begin();
-    ofClear(0, 0);
-    
-    for (int i = 0; i < stencils.size(); i++) {
-        stencils[i]->draw();
-    }
-    
-    stencilBuffer.src->end();
-    
-    
-    stencilBuffer.dst->begin();
-    ofClear(0,0);
-    ofSetColor(255,255);
-    
-    stencilShader.begin();
-    stencilShader.setUniformTexture("imageTex", canvas.getTextureReference() , 0);
-    stencilShader.setUniformTexture("stencilTex", stencilBuffer.src->getTextureReference(), 1);
-    
-    glBegin(GL_QUADS);
-    glTexCoord2f(0, 0); glVertex3f(0, 0, 0);
-    glTexCoord2f(width, 0); glVertex3f(width, 0, 0);
-    glTexCoord2f(width, height); glVertex3f(width,height, 0);
-    glTexCoord2f(0,height);  glVertex3f(0,height, 0);
-    glEnd();
-
-    stencilShader.end();
-    stencilBuffer.dst->end();
+//    //  Stencil Mask
+//    //
+//    stencilBuffer.src->begin();
+//    ofClear(0, 0);
+//    
+//    for (int i = 0; i < stencils.size(); i++) {
+//        stencils[i]->draw();
+//    }
+//    
+//    stencilBuffer.src->end();
+//    
+//    
+//    stencilBuffer.dst->begin();
+//    ofClear(0,0);
+//    ofSetColor(255,255);
+//    
+//    stencilShader.begin();
+//    stencilShader.setUniformTexture("imageTex", canvas.getTextureReference() , 0);
+//    stencilShader.setUniformTexture("stencilTex", stencilBuffer.src->getTextureReference(), 1);
+//    
+//    glBegin(GL_QUADS);
+//    glTexCoord2f(0, 0); glVertex3f(0, 0, 0);
+//    glTexCoord2f(width, 0); glVertex3f(width, 0, 0);
+//    glTexCoord2f(width, height); glVertex3f(width,height, 0);
+//    glTexCoord2f(0,height);  glVertex3f(0,height, 0);
+//    glEnd();
+//
+//    stencilShader.end();
+//    stencilBuffer.dst->end();
     
     ofSetWindowTitle( ofToString(ofGetFrameRate()));
 }
@@ -102,12 +102,13 @@ void testApp::update(){
 void testApp::draw(){
     ofBackground(0);
     
-//    canvas.draw(0, 0);
-    stencilBuffer.dst->draw(0, 0);
-    
-    for (int i = 0; i < stencils.size(); i++) {
-        stencils[i]->drawGui();
-    }
+    canvas.draw(0, 0);
+
+//    stencilBuffer.dst->draw(0, 0);
+//    
+//    for (int i = 0; i < stencils.size(); i++) {
+//        stencils[i]->drawGui();
+//    }
     
     paletteBtn.draw();
     cleanBtn.draw();
@@ -135,11 +136,11 @@ void testApp::mousePressed(int x, int y, int button) {
         
         if ( !palette.checkColor(loc, spray.paintColor)){
             
-            for (int i = 0; i < stencils.size(); i++) {
-                if ( stencils[i]->checkClick(ofPoint(x,y) ) ){
-                    return;
-                }
-            }
+//            for (int i = 0; i < stencils.size(); i++) {
+//                if ( stencils[i]->checkClick(ofPoint(x,y) ) ){
+//                    return;
+//                }
+//            }
             
             spray.addPaint(loc);
         }
@@ -152,11 +153,12 @@ void testApp::mouseDragged(int x, int y, int button){
     //
     
     if ( !palette.checkColor(ofPoint(x,y), spray.paintColor)){
-        for (int i = 0; i < stencils.size(); i++) {
-            if ( stencils[i]->checkClick(ofPoint(x,y) ) ){
-                return;
-            }
-        }
+        
+//        for (int i = 0; i < stencils.size(); i++) {
+//            if ( stencils[i]->checkClick(ofPoint(x,y) ) ){
+//                return;
+//            }
+//        }
         
         spray.addPaint( ofPoint(x,y) );
     }
@@ -193,26 +195,24 @@ void testApp::addStencil(int &_n ){
     
     //  TODO: get file name from palette of Stencils
     //
-    string fileName = "banksy.png";
-    
-    Stencil * newStencil = new Stencil();
-    newStencil->loadImage(fileName);
-    newStencil->nId = stencilIdCounter++;
-    ofAddListener( newStencil->close, this, &testApp::closeStencil);
-    
-    stencils.push_back(newStencil);
+//    string fileName = "banksy.png";
+//    
+//    Stencil * newStencil = new Stencil();
+//    newStencil->loadImage(fileName);
+//    newStencil->nId = stencilIdCounter++;
+//    ofAddListener( newStencil->close, this, &testApp::closeStencil);
+//    
+//    stencils.push_back(newStencil);
 }
 
 void testApp::closeStencil(int &_n ){
-    for (int i = stencils.size()-1; i >= 0; i--) {
-        if (stencils[i]->nId == _n){
-            
-            delete stencils[i];
-            
-            stencils.erase(stencils.begin()+i);
-            return;
-        }
-    }
+//    for (int i = stencils.size()-1; i >= 0; i--) {
+//        if (stencils[i]->nId == _n){
+//            delete stencils[i];
+//            stencils.erase(stencils.begin()+i);
+//            return;
+//        }
+//    }
 }
 
 //----------------------------------------------------------- TUIO

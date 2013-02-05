@@ -45,10 +45,10 @@ public:
     
     //  Stencil
     //
-    ofShader        stencilShader;
-    ofxSwapBuffer   stencilBuffer;
-    vector<Stencil*> stencils;
-    int             stencilIdCounter;
+//    ofShader        stencilShader;
+//    ofxSwapBuffer   stencilBuffer;
+//    vector<Stencil*> stencils;
+//    int             stencilIdCounter;
     
     //  Graffiti
     //
