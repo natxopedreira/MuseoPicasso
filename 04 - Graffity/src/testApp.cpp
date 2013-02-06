@@ -30,9 +30,12 @@ void testApp::setup(){
 //    
 //    stencilShader.setupShaderFromSource(GL_FRAGMENT_SHADER, stencilFragShader);
 //    stencilShader.linkProgram();
+//    stencilBuffer.allocate(width,height, GL_RGBA);
+//    stencilIdCounter = 0;
+    
+//    addStencil(stencilIdCounter);
     
     canvas.allocate(width,height, GL_RGBA);
-//    stencilBuffer.allocate(width,height, GL_RGBA);
     
     palette.loadPalette("settings.xml");
     palette.setVisible(false);
@@ -44,9 +47,6 @@ void testApp::setup(){
     ofAddListener( cleanBtn.clickPressed, this, &testApp::cleanCanvas );
     cleanBtn.setImage("icon_close.png");
     
-    //stencilIdCounter = 0;
-    
-    //addStencil(stencilIdCounter);
 }
 
 //--------------------------------------------------------------
