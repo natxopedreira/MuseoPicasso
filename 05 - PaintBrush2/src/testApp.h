@@ -60,7 +60,7 @@ public:
     ofxFloatSlider  colorLerp;
     ofxFloatSlider  colorRandom;
 
-    Brush           brush;
+    vector<Brush*>  brushes;
     ofFbo           canvas;
     
     ColorPalette    palette;
@@ -69,6 +69,6 @@ public:
     SimpleBtn       cleanBtn;
 
     ofColor         color;
-    int             iconSize;
+    int             iconSize, idCounter, mouseId;
     bool            bDebug;
 };

@@ -9,7 +9,7 @@
 <repulsion_rad>0.599999964</repulsion_rad>
 <repulsion_pct>1.000000000</repulsion_pct>
 <color_lerp>0.514999986</color_lerp>
-<color_random>0.054000001</color_random>
+<color_random>0.079000004</color_random>
 <palette>
     <height>250</height>
     <img>01.png</img>

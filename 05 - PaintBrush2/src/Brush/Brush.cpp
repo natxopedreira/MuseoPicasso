@@ -20,6 +20,16 @@ Brush::Brush(){
     repRad = 5.0;
 }
 
+Brush::~Brush(){
+    for(int i = 0; i < springs.size(); i++){
+        delete As[i];
+        delete Bs[i];
+    }
+    As.clear();
+    Bs.clear();
+    springs.clear();
+}
+
 void Brush::setBrushWidth(float _width){
     brushWidth = _width;
     

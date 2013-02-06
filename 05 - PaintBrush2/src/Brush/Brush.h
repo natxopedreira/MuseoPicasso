@@ -16,6 +16,7 @@
 class Brush : public ofPoint {
 public:
     Brush();
+    ~Brush();
 
     void    begin();
     void    end();
@@ -46,6 +47,7 @@ public:
     float   repRad;
     float   repPct;
     
+    int     nId;
     bool    bDown;
     bool    bDebug;
     

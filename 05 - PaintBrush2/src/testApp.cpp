@@ -42,32 +42,37 @@ void testApp::setup(){
     cleanBtn.set(ofGetWidth()-iconSize,ofGetHeight()-iconSize,iconSize,iconSize);
     ofAddListener( cleanBtn.clickPressed, this, &testApp::cleanCanvas );
     cleanBtn.setImage("icon_close.png");
-    
+
+    idCounter = 0;
+    mouseId = -1;
+
     bDebug  = false;
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
-    brush.update();
+    tuioClient.getMessage();
+    
+    for (int i = 0; i < brushes.size(); i++){
+        brushes[i]->update();
+    }
+    
     palette.update();
 
     canvas.begin();
     if ( palette.getVisible() ){
-        if ( mouseY > palette.getY() ){
-            brush.draw();
+        for(int i = 0; i < brushes.size(); i++){
+            if ( brushes[i]->y > palette.getY() ){
+                brushes[i]->draw();
+            }
         }
+        
     } else {
-        brush.draw();
+        for(int i = 0; i < brushes.size(); i++){
+            brushes[i]->draw();
+        }
     }
     canvas.end();
-    
-    if ( palette.getVisible() ){
-        if ( mouseY < palette.getY() ){
-            palette.begin();
-            brush.draw();
-            palette.end();
-        }
-    }
     
     ofSetWindowTitle(ofToString(ofGetFrameRate()));
 }
@@ -85,7 +90,9 @@ void testApp::draw(){
     
     if (bDebug){
         ofSetColor(255);
-        brush.drawDebug();
+        for(int i = 0; i < brushes.size(); i++){
+            brushes[i]->drawDebug();
+        }
         
         gui.draw();
     }
@@ -102,7 +109,10 @@ void testApp::keyPressed(int key){
     } else if (key == 'f'){
         ofToggleFullscreen();
     } else if ( key == 'p'){
-        brush.clear();
+        for(int i = 0; i < brushes.size(); i++){
+            brushes[i]->clear();
+        }
+        
         if (!palette.getVisible()){
             palette.clear();
         }
@@ -113,13 +123,17 @@ void testApp::keyPressed(int key){
 void testApp::showPalette(int &_n){
     if (!palette.getVisible()){
         palette.clear();
-        brush.clear();
+        for(int i = 0; i < brushes.size(); i++){
+            brushes[i]->clear();
+        }
         palette.setVisible(true);
     }
 }
 
 void testApp::cleanCanvas(int &_n){
-    brush.clear();
+    for(int i = 0; i < brushes.size(); i++){
+        brushes[i]->clear();
+    }
     canvas.begin();
     ofClear(0,0);
     canvas.end();
@@ -135,58 +149,75 @@ void testApp::mouseMoved(int x, int y ){
 }
 
 //--------------------------------------------------------------
-void testApp::mouseDragged(int x, int y, int button){
-//    if ( palette.getVisible() ){
-//        brush.pickColorFrom( palette.getTextureReference(),colorLerp,colorRandom );
-//    } 
-    
-    brush.set(x,y);
-}
-
-//--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
     ofPoint mouse(x,y);
     
     if ( !cleanBtn.checkOver(mouse) && !paletteBtn.checkOver(mouse)){
+    
+        idCounter++;
+        mouseId = idCounter;
         
         if (palette.getVisible()){
             if (  mouseY > palette.getY() ){
-                brush.clear();
                 palette.setVisible(false);
             } else {
     
                 if (palette.checkColor(ofPoint(x,y), color)){
-                    brush.clear();
                     palette.setVisible(false);
-                    brush.clear();
                 }
                 
             }
         }
         
-        ofPoint mouse(mouseX,mouseY);
         paletteBtn.checkOver(mouse);
         cleanBtn.checkOver(mouse);
         
-        brush.init(brushNumber);
-        brush.setBrushWidth(brushWidth);
-        brush.setLineWidth(lineWidth);
-        brush.setColor( color, colorRandom);
+        Brush * newBrush = new Brush;
+        newBrush->init(brushNumber);
+        newBrush->setBrushWidth(brushWidth);
+        newBrush->setLineWidth(lineWidth);
+        newBrush->setColor( color, colorRandom);
+        newBrush->nId = mouseId;
         
-        brush.damp = brushDamp;
-        brush.k = brushK;
-        brush.repPct = brushRepPct;
-        brush.repRad = brushRepRad;
+        newBrush->damp = brushDamp;
+        newBrush->k = brushK;
+        newBrush->repPct = brushRepPct;
+        newBrush->repRad = brushRepRad;
         
-        brush.begin();
-        brush.set(x,y);
+        newBrush->begin();
+        newBrush->set(x,y);
+        
+        cout << "New brush add n " << mouseId << endl;
+        brushes.push_back(newBrush);
     } 
 }
 
 //--------------------------------------------------------------
+void testApp::mouseDragged(int x, int y, int button){
+
+    for (int i = 0; i < brushes.size(); i++) {
+        if (brushes[i]->nId == mouseId){
+            brushes[i]->set(x,y);
+            return;
+        }
+    }
+}
+
+//--------------------------------------------------------------
 void testApp::mouseReleased(int x, int y, int button){
-    brush.set(x, y);
-    brush.end();
+    
+    for(int i = brushes.size()-1; i >= 0 ; i--){
+        if (brushes[i]->nId == mouseId){
+            brushes[i]->set(x,y);
+            brushes[i]->end();
+            brushes[i]->nId = -1;
+            
+            delete brushes[i];
+            brushes.erase(brushes.begin()+i);
+            return;
+        }
+    }
+    
 }
 
 //----------------------------------------------------------- TUIO
@@ -195,6 +226,41 @@ void testApp::_tuioAdded(TuioCursor & tuioCursor){
                           tuioCursor.getY()*ofGetHeight(),
                           0.0);
     
+    if ( !cleanBtn.checkOver(loc) && !paletteBtn.checkOver(loc)){
+        
+        if (palette.getVisible()){
+            if (  mouseY > palette.getY() ){
+                palette.setVisible(false);
+            } else {
+                
+                if (palette.checkColor(loc, color)){
+                    palette.setVisible(false);
+                }
+                
+            }
+        }
+        
+        paletteBtn.checkOver(loc);
+        cleanBtn.checkOver(loc);
+        
+        Brush * newBrush = new Brush;
+        newBrush->init(brushNumber);
+        newBrush->setBrushWidth(brushWidth);
+        newBrush->setLineWidth(lineWidth);
+        newBrush->setColor( color, colorRandom);
+        newBrush->nId = tuioCursor.getFingerId();
+        
+        newBrush->damp = brushDamp;
+        newBrush->k = brushK;
+        newBrush->repPct = brushRepPct;
+        newBrush->repRad = brushRepRad;
+        
+        newBrush->begin();
+        newBrush->set(loc.x,loc.y);
+        
+        brushes.push_back(newBrush);
+    }
+    
 }
 
 void testApp::_tuioUpdated(TuioCursor &tuioCursor){
@@ -202,10 +268,30 @@ void testApp::_tuioUpdated(TuioCursor &tuioCursor){
                           tuioCursor.getY()*ofGetHeight(),
                           0.0);
     
+    for (int i = 0; i < brushes.size(); i++) {
+        if (brushes[i]->nId == tuioCursor.getFingerId()){
+            brushes[i]->set(loc.x,loc.y);
+            return;
+        }
+    }
 }
 
 void testApp::_tuioRemoved(TuioCursor & tuioCursor){
+    ofPoint loc = ofPoint(tuioCursor.getX()*ofGetWidth(),
+                          tuioCursor.getY()*ofGetHeight(),
+                          0.0);
     
+    for(int i = brushes.size()-1; i >= 0 ; i--){
+        if (brushes[i]->nId == tuioCursor.getFingerId()){
+            brushes[i]->set(loc.x,loc.y);
+            brushes[i]->end();
+            
+            delete brushes[i];
+            
+            brushes.erase(brushes.begin()+i);
+            return;
+        }
+    }
 }
 
 //--------------------------------------------------------------
