@@ -10,14 +10,11 @@
 
 //--------------------------------------------------------------
 Page::Page(){
+    meshDefinition = 10;
 }
 
-int Page::getCols(){
-    return width;
-}
-
-int Page::getRows(){
-    return height;
+float Page::getTransition(){
+    return ofMap(angle, 0.0, 1.2, 1.0, 0.0);
 }
 
 void Page::setHandAt(ofPoint _hand){
@@ -69,7 +66,7 @@ void Page::setHandAt(ofPoint _hand){
             // flipping from bottom corner
             //
             posNegOne = -1.0f;
-            ay = -ay + getRows();
+            ay = -ay + height;
         }
         
         conicContribution = abs(conicContribution);
@@ -78,7 +75,7 @@ void Page::setHandAt(ofPoint _hand){
         // on to a cylinder. The cylinder radius is taken as the endpoint of the cone parameters:
         // ie: cylRadius = R*sin(theta) where R is the distance to the rightmost point on the page, all the way up.
         //
-        cylR = sqrt( getCols()*getCols() + (getRows()*0.5-ay) * (getRows()*0.5-ay));
+        cylR = sqrt( width*width + (height*0.5-ay) * (height*0.5-ay));
         cylRadius = cylR * sin(theta);
         
         // This is a hack to fix the bump at the start of a curl. If theta is greater than 50 degrees,
@@ -98,15 +95,13 @@ void Page::update(){
         mesh.clear();
         mesh.setMode(OF_PRIMITIVE_TRIANGLES);
         
-        int skip = 10;
-        
-        for(int j = 0; j < height; j += skip) {
-            for(int i = 0; i < width; i += skip) {
+        for(int j = 0; j < height; j += meshDefinition) {
+            for(int i = 0; i < width; i += meshDefinition) {
                 
                 ofVec3f nw = ofPoint(x,y) + getCurlPos( ofPoint(i,j,0) );
-                ofVec3f ne = ofPoint(x,y) + getCurlPos( ofPoint(i+skip,j,0) );
-                ofVec3f sw = ofPoint(x,y) + getCurlPos( ofPoint(i,j+skip,0) );
-                ofVec3f se = ofPoint(x,y) + getCurlPos( ofPoint(i+skip,j+skip,0) );
+                ofVec3f ne = ofPoint(x,y) + getCurlPos( ofPoint(i+meshDefinition,j,0) );
+                ofVec3f sw = ofPoint(x,y) + getCurlPos( ofPoint(i,j+meshDefinition,0) );
+                ofVec3f se = ofPoint(x,y) + getCurlPos( ofPoint(i+meshDefinition,j+meshDefinition,0) );
                 
                 addFace(mesh, nw, ne, se, sw);
             }
@@ -194,6 +189,8 @@ void Page::addFace(ofMesh& mesh, ofPoint a, ofPoint b, ofPoint c, ofPoint d) {
 
 void Page::draw(bool _bDebug){
     
+    ofSetColor(ofFloatColor(1.0,getTransition()));
+    
     if (!_bDebug){
         mesh.draw();
     } else {
@@ -209,14 +206,7 @@ void Page::draw(bool _bDebug){
         float cSize = 5;
         ofLine(-cSize, 0, cSize, 0);
         ofLine(0, -cSize, 0, cSize);
-        
-        //  Cone Axis
-        //
-        ofTranslate(0, getRows()*0.5 - ay);
-        ofSetColor(0, 255, 0);
-        ofLine(-cSize, 0, cSize, 0);
-        ofLine(0, -cSize, 0, cSize);
-        
+    
         ofPopMatrix();
         
         ofNoFill();

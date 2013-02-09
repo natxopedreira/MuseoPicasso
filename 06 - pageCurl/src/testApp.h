@@ -20,7 +20,8 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
 	
-    ofLight light;
+    ofLight pointLight;
+    ofMaterial material;
     
 	Page page;
 };

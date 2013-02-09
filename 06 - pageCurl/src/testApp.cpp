@@ -4,14 +4,21 @@
 void testApp::setup(){
     ofSetFrameRate(60);
     ofSetVerticalSync(true);
+    ofEnableAlphaBlending();
     ofBackground(0);
     
-    light.enable();
-	light.setPosition(+500, 0, 0);
+    ofSetSmoothLighting(true);
+    pointLight.setPosition(ofGetWidth()*0.5, ofGetHeight()*0.5, -1000);
+    pointLight.setDiffuseColor( ofColor(255.f, 255.f, 255.f));
+	pointLight.setSpecularColor( ofColor(255.f, 255.f, 255.f));
+    
+	material.setShininess(64);
+	material.setSpecularColor(ofFloatColor(1.0, 1.0, 1.0));
     
     int width = 480*0.5;
     int height = 640*0.5;
     page.set(ofGetWidth()*0.5, ofGetHeight()*0.5-height*0.5, width, height);
+//    page.set(0, 0-height*0.5, width, height);
 }
 
 //--------------------------------------------------------------
@@ -21,8 +28,27 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
+    if (ofGetKeyPressed()){
+        page.draw(true);
+    }
     
-    page.draw(true);
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    
+    ofEnableLighting();
+    pointLight.enable();
+    material.begin();
+    
+    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE,1);
+    
+    page.draw();
+    
+    material.end();
+    ofDisableLighting();
+    
+    glDisable(GL_DEPTH_TEST);
+    
+    
     
 }
 

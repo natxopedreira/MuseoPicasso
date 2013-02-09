@@ -21,19 +21,19 @@ class Page : public ofRectangle {
 public:
     
     Page();
-    
+
+    float   getTransition();
     void    setHandAt(ofPoint _hand);
     
     void    update();
-    void    draw(bool _bDebug);
+    void    draw(bool _bDebug = false);
+    
+    int     meshDefinition;
     
 private:
     void    addFace(ofMesh& mesh, ofPoint a, ofPoint b, ofPoint c, ofPoint d);
     void    addFace(ofMesh& mesh, ofPoint a, ofPoint b, ofPoint c);
-    
     ofPoint getCurlPos(ofPoint pos);
-    int     getCols();
-    int     getRows();
 
     ofMesh  mesh;
     ofPoint hand;
