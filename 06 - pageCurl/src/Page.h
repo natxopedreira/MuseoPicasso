@@ -24,6 +24,7 @@ public:
 
     float   getTransition();
     void    setHandAt(ofPoint _hand);
+    void    setNormHandAt(ofPoint _hand);
     
     void    update();
     void    draw(bool _bDebug = false);

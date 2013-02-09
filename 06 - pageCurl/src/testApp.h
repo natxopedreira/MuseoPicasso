@@ -4,6 +4,10 @@
 
 #include "Page.h"
 
+//#define USE_TUIO
+#include "ofxOsc.h"
+#include "ofxTuioClient.h"
+
 class testApp : public ofBaseApp{
 public:
     void setup();
@@ -20,6 +24,15 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
 	
+    void _tuioAdded(ofxTuioCursor & tuioCursor);
+	void _tuioRemoved(ofxTuioCursor & tuioCursor);
+	void _tuioUpdated(ofxTuioCursor & tuioCursor);
+    
+    //  Input
+    //
+    ofxTuioClient   tuioClient;
+    ofxOscReceiver  oscReceiver;
+    
     ofLight pointLight;
     ofMaterial material;
     

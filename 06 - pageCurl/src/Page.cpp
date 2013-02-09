@@ -28,8 +28,22 @@ void Page::setHandAt(ofPoint _hand){
             bChange = true;
         }
     }
+}
+
+void Page::setNormHandAt(ofPoint _hand){
+    
+    if ( hand != _hand ){
+        hand = _hand;
+        bChange = true;
+    }
+    
+}
+
+void Page::update(){
     
     if (bChange){
+        //  Update angles and parameters for making the Cone and the cylinder
+        //
         if (hand.x > 0.95f){
             theta = STRAIGHT_LINE(1.0f,    90.0f,   0.95f,  60.0f, hand.x);
             ay =    STRAIGHT_LINE(1.0f,   -20.0f,   0.95f,  -5.0f, hand.x);
@@ -86,12 +100,9 @@ void Page::setHandAt(ofPoint _hand){
             float x2 = ofDegToRad(50.0f);
             cylRadius = STRAIGHT_LINE(x1, 200.0f, x2, cylRadiusAt50, theta);
         }
-    }
-}
-
-void Page::update(){
-    
-    if (bChange){
+        
+        //  Re-build mesh
+        //
         mesh.clear();
         mesh.setMode(OF_PRIMITIVE_TRIANGLES);
         
