@@ -6,46 +6,23 @@ void testApp::setup(){
     ofSetVerticalSync(true);
     ofBackground(0);
     
-    camera.tilt(-30);
-    camera.rotate(20, 0, 1, 0);
+    light.enable();
+	light.setPosition(+500, 0, 0);
     
-    ofSetSmoothLighting(true);
-    pointLight.setDiffuseColor( ofColor(255.f, 255.f, 255.f));
-	pointLight.setSpecularColor( ofColor(255.f, 255.f, 255.f));
-    
-	material.setShininess(64);
-	material.setSpecularColor(ofFloatColor(1.0, 1.0, 1.0));
-    
-    page.path.setFillColor(ofColor(255));
-    
+    int width = 480*0.5;
+    int height = 640*0.5;
+    page.set(ofGetWidth()*0.5, ofGetHeight()*0.5-height*0.5, width, height);
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
-    page.rebuild(sin(ofGetElapsedTimef())*2.0);
+    page.update();
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
     
-    camera.begin();
-    glEnable(GL_DEPTH_TEST);
-    glDepthMask(GL_TRUE);
-    
-    ofEnableLighting();
-    pointLight.enable();
-    material.begin();
-    
-    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE,1);
-    
-    ofSetColor(255);
-    page.draw(ofGetKeyPressed());
-    
-    material.end();
-    ofDisableLighting();
-    camera.end();
-    
-    glDisable(GL_DEPTH_TEST);
+    page.draw(true);
     
 }
 
@@ -61,12 +38,12 @@ void testApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void testApp::mouseMoved(int x, int y ){
-
+    page.setHandAt(ofPoint(x,y));
 }
 
 //--------------------------------------------------------------
 void testApp::mouseDragged(int x, int y, int button){
-
+    
 }
 
 //--------------------------------------------------------------
