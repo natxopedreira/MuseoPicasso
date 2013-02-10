@@ -15,6 +15,13 @@
 // as template parameters).
 #define STRAIGHT_LINE(x1, y1, x2, y2, x) (((y2 - y1) / (x2 - x1)) * (x - x1) + y1)
 
+struct vectorFace{
+    
+    ofPoint a,b,c,d;        //  TexCoord
+    ofPoint A, B, C, D;     //  Vectex
+    
+};
+
 //--------------------------------------------------------------
 //--------------------------------------------------------------
 class Page : public ofRectangle {
@@ -23,17 +30,20 @@ public:
     Page();
 
     float   getTransition();
-    void    setHandAt(ofPoint _hand);
-    void    setNormHandAt(ofPoint _hand);
+    void    setHandAt(ofPoint _hand, float lerpPct = 0.1);
+    void    setNormHandAt(ofPoint _hand, float lerpPct = 0.1);
     
     void    update();
     void    draw(bool _bDebug = false);
     
+    ofTexture* A;
+    ofTexture* B;
+    
     int     meshDefinition;
     
 private:
-    void    addFace(ofMesh& mesh, ofPoint a, ofPoint b, ofPoint c, ofPoint d);
-    void    addFace(ofMesh& mesh, ofPoint a, ofPoint b, ofPoint c);
+    void    addFace(ofMesh& _mesh, vectorFace &_face);
+    void    addFace(ofMesh& _mesh, ofPoint _a, ofPoint _b, ofPoint _c);
     ofPoint getCurlPos(ofPoint pos);
 
     ofMesh  mesh;

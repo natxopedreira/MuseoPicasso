@@ -36,5 +36,8 @@ public:
     ofLight pointLight;
     ofMaterial material;
     
+    ofImage imgA;
+    ofImage imgB;
+    
 	Page page;
 };

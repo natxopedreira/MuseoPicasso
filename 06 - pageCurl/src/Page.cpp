@@ -10,30 +10,43 @@
 
 //--------------------------------------------------------------
 Page::Page(){
-    meshDefinition = 10;
+    meshDefinition = 20;
+    
+    A = NULL;
+    B = NULL;
 }
 
 float Page::getTransition(){
     return ofMap(angle, 0.0, 1.2, 1.0, 0.0);
 }
 
-void Page::setHandAt(ofPoint _hand){
+void Page::setHandAt(ofPoint _hand, float lerpPct){
     if ( inside(_hand) ){
-        hand.x = ofNormalize(_hand.x, x, x+width);
-        hand.y = ofNormalize(_hand.y, y, y+height);
+        hand.x = ofLerp(hand.x,ofNormalize(_hand.x, x, x+width),lerpPct);
+        hand.y = ofLerp(hand.y,ofNormalize(_hand.y, y, y+height),lerpPct);
         bChange = true;
     } else {
-        if ( hand != ofPoint(1.0,1.0,0.0)){
-            hand.set(1.0,1.0,0.0);
+        
+        if ( (hand != ofPoint(1.0,1.0)) && ( hand != ofPoint(0.0,0.0))){
+        
+            if (hand.x >= 0.5){
+                hand.x = ofLerp(hand.x, 1.0, lerpPct);
+            } else {
+                hand.x = ofLerp(hand.x, 0.0, lerpPct);
+            }
+            
+            hand.y = ofLerp(hand.y, 1.0, lerpPct);
             bChange = true;
         }
+        
     }
 }
 
-void Page::setNormHandAt(ofPoint _hand){
+void Page::setNormHandAt(ofPoint _hand, float lerpPct){
     
     if ( hand != _hand ){
-        hand = _hand;
+        hand.x = ofLerp(hand.x, _hand.x, lerpPct );
+        hand.y = ofLerp(hand.y, _hand.y, lerpPct );
         bChange = true;
     }
     
@@ -109,12 +122,24 @@ void Page::update(){
         for(int j = 0; j < height; j += meshDefinition) {
             for(int i = 0; i < width; i += meshDefinition) {
                 
-                ofVec3f nw = ofPoint(x,y) + getCurlPos( ofPoint(i,j,0) );
-                ofVec3f ne = ofPoint(x,y) + getCurlPos( ofPoint(i+meshDefinition,j,0) );
-                ofVec3f sw = ofPoint(x,y) + getCurlPos( ofPoint(i,j+meshDefinition,0) );
-                ofVec3f se = ofPoint(x,y) + getCurlPos( ofPoint(i+meshDefinition,j+meshDefinition,0) );
+                vectorFace face;
                 
-                addFace(mesh, nw, ne, se, sw);
+                //  texCoords
+                //
+                face.a.set(i,height-j,0);
+                face.b.set(i+meshDefinition,height-j,0);
+                face.c.set(i+meshDefinition,height-j-meshDefinition,0);
+                face.d.set(i,height-j-meshDefinition,0);
+                
+                //  Vectex
+                //
+                face.A = getCurlPos( ofPoint(i,j,0) );
+                face.B = getCurlPos( ofPoint(i+meshDefinition,j,0) );
+                face.C = getCurlPos( ofPoint(i+meshDefinition,j+meshDefinition,0) );
+                face.D = getCurlPos( ofPoint(i,j+meshDefinition,0) );
+                
+                
+                addFace(mesh, face);
             }
         }
         
@@ -193,37 +218,70 @@ void Page::addFace(ofMesh& mesh, ofPoint a, ofPoint b, ofPoint c) {
 }
 
 //--------------------------------------------------------------
-void Page::addFace(ofMesh& mesh, ofPoint a, ofPoint b, ofPoint c, ofPoint d) {
-	addFace(mesh, a, b, c);
-	addFace(mesh, a, c, d);
+void Page::addFace(ofMesh& mesh, vectorFace& _face) {
+	addFace(mesh, _face.A, _face.B, _face.C);
+    mesh.addTexCoord(_face.a);
+    mesh.addTexCoord(_face.b);
+    mesh.addTexCoord(_face.c);
+    
+	addFace(mesh, _face.A, _face.C, _face.D);
+    mesh.addTexCoord(_face.a);
+    mesh.addTexCoord(_face.c);
+    mesh.addTexCoord(_face.d);
 }
 
 void Page::draw(bool _bDebug){
     
-    ofSetColor(ofFloatColor(1.0,getTransition()));
-    
-    if (!_bDebug){
-        mesh.draw();
-    } else {
-        mesh.drawWireframe();
         
-        ofPushStyle();
+    if (!_bDebug){
         ofPushMatrix();
-        ofTranslate(x, y+height*0.5);
+        ofPushStyle();
+    
+        ofTranslate(x, y);
+    
+        if (A != NULL)
+            A->bind();
+        
+        ofSetColor(ofFloatColor(1.0));//,getTransition()));
+        mesh.draw();
+        
+        if (A != NULL)
+            A->unbind();
+        
+        if (B !=NULL){
+    
+            ofSetColor(ofFloatColor(1.0, ofMap(getTransition(),0.0,0.1,1.0,0.0) ) );
+            ofRectangle bSide(*this);
+            bSide.x = -width;
+            bSide.y = 0;
+            B->draw(bSide);
+            
+        }
+        
+        ofPopStyle();
+        ofPopMatrix();
+    } else {
+        ofPushMatrix();
+        ofPushStyle();
+        
+        ofTranslate(x, y);
+        ofSetColor(ofFloatColor(1.0,getTransition()));
+        
+        mesh.drawWireframe();
         
         //  Center of the book
         //
+        ofTranslate(0, height*0.5);
         ofSetColor(255, 0, 0);
         float cSize = 5;
         ofLine(-cSize, 0, cSize, 0);
         ofLine(0, -cSize, 0, cSize);
     
         ofPopMatrix();
-        
-        ofNoFill();
         ofSetColor(255, 0, 0);
         ofCircle(x+hand.x*width, y+hand.y*height, 10);
-
+        
+        ofNoFill();
         ofSetColor(0,0,255);
         ofRect(*this);
         

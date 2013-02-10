@@ -308,8 +308,8 @@
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* testApp.h */,
 				E4B69E1E0A3A1BDC003C02F2 /* testApp.cpp */,
-				20cda64300107193de2e64daae754423 /* Page.cpp */,
 				f98fdc16eb965eb65747a45ed2e730f9 /* Page.h */,
+				20cda64300107193de2e64daae754423 /* Page.cpp */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;

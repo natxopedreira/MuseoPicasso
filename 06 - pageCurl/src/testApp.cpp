@@ -5,7 +5,6 @@ void testApp::setup(){
     ofSetFrameRate(60);
     ofSetVerticalSync(true);
     ofEnableAlphaBlending();
-    ofBackground(0);
     
     ofAddListener(tuioClient.cursorAdded,this,&testApp::_tuioAdded);
 	ofAddListener(tuioClient.cursorRemoved,this,&testApp::_tuioRemoved);
@@ -20,26 +19,40 @@ void testApp::setup(){
 	material.setShininess(64);
 	material.setSpecularColor(ofFloatColor(1.0, 1.0, 1.0));
     
-    int width = 480*0.5;
-    int height = 640*0.5;
+    
+    imgA.loadImage("00.jpeg");
+    imgB.loadImage("01.jpeg");
+    
+    int width = imgA.getWidth();
+    int height = imgB.getHeight();
     page.set(ofGetWidth()*0.5, ofGetHeight()*0.5-height*0.5, width, height);
+    page.A = &(imgA.getTextureReference());
+    page.B = &(imgB.getTextureReference());
+    
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
     tuioClient.getMessage();
     
+#ifndef USE_TUIO
+    page.setHandAt(ofPoint(mouseX, mouseY));
+#endif
+    
     page.update();
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
+    ofBackgroundGradient(ofColor::gray, ofColor::black);
+    
     if (ofGetKeyPressed()){
         page.draw(true);
         tuioClient.drawCursors();
     }
     
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_NORMALIZE);
     glDepthMask(GL_TRUE);
     
     ofEnableLighting();
@@ -48,11 +61,15 @@ void testApp::draw(){
     
     glLightModeli(GL_LIGHT_MODEL_TWO_SIDE,1);
     
+    glEnable(GL_SMOOTH);
+	glShadeModel(GL_SMOOTH);
+    
     page.draw();
     
     material.end();
     ofDisableLighting();
     
+	glDisable(GL_NORMALIZE);
     glDisable(GL_DEPTH_TEST);
     
     
@@ -71,10 +88,6 @@ void testApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void testApp::mouseMoved(int x, int y ){
-    
-#ifndef USE_TUIO
-    page.setHandAt(ofPoint(x,y));
-#endif
     
 }
 
@@ -107,7 +120,8 @@ void testApp::_tuioUpdated(ofxTuioCursor &tuioCursor){
                           0.0);
     
 #ifdef USE_TUIO
-    page.setNormHandAt(ofPoint(tuioCursor.getX(),tuioCursor.getY()));
+//    page.setNormHandAt(ofPoint(tuioCursor.getX(),tuioCursor.getY()));
+    page.setHandAt(loc);
 #endif
     
 }

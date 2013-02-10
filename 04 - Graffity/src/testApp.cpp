@@ -100,9 +100,9 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-    ofBackground(0);
+    ofBackground(255);
     
-    canvas.draw(0, 0);
+    canvas.draw(0,0);
 
 //    stencilBuffer.dst->draw(0, 0);
 //    
@@ -183,12 +183,12 @@ void testApp::showPalette(int &_n){
 
 void testApp::cleanCanvas(int &_n){
     spray.clean();
-    canvas.begin();
-    ofClear(0,0);
-    canvas.end();
+
+    canvas.begin(0);
+    ofClear(255,255);
+    canvas.end(0);
     
-    canvas.clear();
-    
+    canvas.clear(0);
 }
 
 void testApp::addStencil(int &_n ){
