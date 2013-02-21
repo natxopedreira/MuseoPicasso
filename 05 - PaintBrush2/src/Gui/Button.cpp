@@ -10,8 +10,7 @@ void SimpleBtn::setImage(string _sFile){
 
 bool SimpleBtn::checkOver(ofPoint _pos){
     if (inside(_pos)){
-        int n = 0;
-        ofNotifyEvent(clickPressed, n);
+        ofNotifyEvent(clickPressed, nId);
         return true;
     } else {
         return false;

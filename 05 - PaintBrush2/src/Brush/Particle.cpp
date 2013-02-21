@@ -28,7 +28,7 @@ void Particle::update(){
         pPoint newPoint;
         newPoint.pos = *this;
         newPoint.color = color;
-        newPoint.color.a = ofMap( vel.length(), 0.0,80.0, 1.0 ,0.0, true );
+        newPoint.color.a = ofMap( vel.length(), 0.0, alphaThreshold , 1.0 ,0.0, true );
         
         tail.push_back(newPoint);
         

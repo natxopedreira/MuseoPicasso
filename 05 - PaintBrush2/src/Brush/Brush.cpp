@@ -18,6 +18,7 @@ Brush::Brush(){
     k = 0.1;
     repPct = 0.5;
     repRad = 5.0;
+    alphaThreshold = 80;
 }
 
 Brush::~Brush(){
@@ -83,6 +84,7 @@ void Brush::init(int _numSprings){
         b->damping = damp;
         b->bFixed = false;
         b->color.set(colors[i]);
+        b->alphaThreshold = alphaThreshold;
         Bs.push_back(b);
         
         Spring newSpring;

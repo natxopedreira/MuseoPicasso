@@ -42,6 +42,7 @@ public:
     void    draw();
     void    drawDebug();
 
+    float   alphaThreshold;
     float   damp;
     float   k;
     float   repRad;

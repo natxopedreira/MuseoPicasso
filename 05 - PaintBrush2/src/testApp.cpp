@@ -18,6 +18,8 @@ void testApp::setup(){
     
     gui.add(colorLerp.setup("color_lerp", 0.5, 0.0, 1.0));
     gui.add(colorRandom.setup("color_random", 0.005, 0.0, 0.1));
+    gui.add(alphaThreshold.setup("alpha_threshold", 80.0, 0.0, 100.0));
+    
     
     gui.loadFromFile("settings.xml");
     
@@ -36,9 +38,18 @@ void testApp::setup(){
     palette.loadPalette("settings.xml");
     palette.setVisible(false);
     
-    paletteBtn.set(0, 0, iconSize+30, iconSize+30);
-    paletteBtn.setImage("icon_pallete.png");
-    ofAddListener( paletteBtn.clickPressed, this, &testApp::showPalette );
+    
+    paletteLandBtn.set(0, 0, iconSize+30, iconSize+30);
+    paletteLandBtn.setImage("landscape.png");
+    paletteLandBtn.nId = 0;
+    paletteProfBtn.set(0, iconSize+30, iconSize+30, iconSize+30);
+    paletteProfBtn.setImage("profile.png");
+    paletteProfBtn.nId = 1;
+    
+    ofAddListener( paletteProfBtn.clickPressed, this, &testApp::showPalette );
+    ofAddListener( paletteLandBtn.clickPressed, this, &testApp::showPalette );
+    
+    
     cleanBtn.set(ofGetWidth()-iconSize,ofGetHeight()-iconSize,iconSize,iconSize);
     ofAddListener( cleanBtn.clickPressed, this, &testApp::cleanCanvas );
     cleanBtn.setImage("icon_close.png");
@@ -62,7 +73,7 @@ void testApp::update(){
     canvas.begin();
     if ( palette.getVisible() ){
         for(int i = 0; i < brushes.size(); i++){
-            if ( brushes[i]->y > palette.getY() ){
+            if ( brushes[i]->x > palette.getOffset() ){
                 brushes[i]->draw();
             }
         }
@@ -81,11 +92,15 @@ void testApp::update(){
 void testApp::draw(){
     ofBackground(0);
     
+    ofSetColor(255);
     canvas.draw(0, 0);
     
-    paletteBtn.draw();
+    ofSetColor(200);
+    paletteProfBtn.draw();
+    paletteLandBtn.draw();
     cleanBtn.draw();
     
+    ofSetColor(255);
     palette.draw();
     
     if (bDebug){
@@ -121,7 +136,9 @@ void testApp::keyPressed(int key){
 }
 
 void testApp::showPalette(int &_n){
+    
     if (!palette.getVisible()){
+        palette.setScheme(_n);
         palette.clear();
         for(int i = 0; i < brushes.size(); i++){
             brushes[i]->clear();
@@ -152,25 +169,28 @@ void testApp::mouseMoved(int x, int y ){
 void testApp::mousePressed(int x, int y, int button){
     ofPoint mouse(x,y);
     
-    if ( !cleanBtn.checkOver(mouse) && !paletteBtn.checkOver(mouse)){
+    if ( palette.getVisible() ){
+        
+        if (  mouseX > palette.getOffset() ){
+            palette.setVisible(false);
+        } else {
+            
+            if (palette.checkColor(ofPoint(x,y), color)){
+                palette.setVisible(false);
+            }
+            
+        }
+        
+    } else if ( paletteProfBtn.checkOver(mouse) ){
+        
+    } else if ( paletteLandBtn.checkOver(mouse)) {
+         
+    } else if ( cleanBtn.checkOver(mouse) ){
+        
+    } else {
     
         idCounter++;
         mouseId = idCounter;
-        
-        if (palette.getVisible()){
-            if (  mouseY > palette.getY() ){
-                palette.setVisible(false);
-            } else {
-    
-                if (palette.checkColor(ofPoint(x,y), color)){
-                    palette.setVisible(false);
-                }
-                
-            }
-        }
-        
-        paletteBtn.checkOver(mouse);
-        cleanBtn.checkOver(mouse);
         
         Brush * newBrush = new Brush;
         newBrush->init(brushNumber);
@@ -183,11 +203,11 @@ void testApp::mousePressed(int x, int y, int button){
         newBrush->k = brushK;
         newBrush->repPct = brushRepPct;
         newBrush->repRad = brushRepRad;
+        newBrush->alphaThreshold = alphaThreshold;
         
         newBrush->begin();
         newBrush->set(x,y);
         
-        cout << "New brush add n " << mouseId << endl;
         brushes.push_back(newBrush);
     } 
 }
@@ -226,22 +246,25 @@ void testApp::_tuioAdded(TuioCursor & tuioCursor){
                           tuioCursor.getY()*ofGetHeight(),
                           0.0);
     
-    if ( !cleanBtn.checkOver(loc) && !paletteBtn.checkOver(loc)){
+    if ( palette.getVisible() ){
         
-        if (palette.getVisible()){
-            if (  mouseY > palette.getY() ){
+        if (  mouseX > palette.getOffset() ){
+            palette.setVisible(false);
+        } else {
+            
+            if (palette.checkColor(loc, color)){
                 palette.setVisible(false);
-            } else {
-                
-                if (palette.checkColor(loc, color)){
-                    palette.setVisible(false);
-                }
-                
             }
+            
         }
         
-        paletteBtn.checkOver(loc);
-        cleanBtn.checkOver(loc);
+    } else if ( paletteProfBtn.checkOver(loc) ){
+        
+    } else if ( paletteLandBtn.checkOver(loc)) {
+        
+    } else if ( cleanBtn.checkOver(loc) ){
+        
+    } else {
         
         Brush * newBrush = new Brush;
         newBrush->init(brushNumber);
@@ -254,6 +277,7 @@ void testApp::_tuioAdded(TuioCursor & tuioCursor){
         newBrush->k = brushK;
         newBrush->repPct = brushRepPct;
         newBrush->repRad = brushRepRad;
+        newBrush->alphaThreshold = alphaThreshold;
         
         newBrush->begin();
         newBrush->set(loc.x,loc.y);

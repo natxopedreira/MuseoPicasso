@@ -13,10 +13,15 @@ ColorPalette::ColorPalette(){
     
     inc = 0.06145;
     shp = 0.3;
-    height = 200;
+    
+    maxOffSet = 200;
     margins = 50;
     
+    nScheme = 0;
+    
     background.loadImage("wood.jpg");
+    
+    bVertical = true;
 }
 
 bool ColorPalette::loadPalette(string _sFile){
@@ -28,7 +33,8 @@ bool ColorPalette::loadPalette(string _sFile){
     if ( XML.loadFile(_sFile)){
         if ( XML.pushTag("palette")) {
             
-            height = XML.getValue("height", height);
+            bVertical = XML.getValue("vertical", bVertical);
+            maxOffSet = XML.getValue("offset", maxOffSet);
             margins = XML.getValue("margins", margins);
             
             for (int i = 0; i < XML.getNumTags("img"); i++){
@@ -45,14 +51,35 @@ bool ColorPalette::loadPalette(string _sFile){
                 }
             }
             
-            for (int i = 0; i < XML.getNumTags("color"); i++){
-                string hexString = XML.getValue("color", "ee1b12", i );
-                int hexInt = ofHexToInt( hexString );
+            
+            int totalSchemes = XML.getNumTags("schemes");
+            for (int j = 0; j < totalSchemes; j++ ){
+                XML.pushTag("schemes",j);
                 
-                ofColor color;
-                color.setHex( hexInt );
-                colors.push_back(color);
+                vector <ofColor> newScheme;
+                
+                for (int i = 0; i < XML.getNumTags("color"); i++){
+                    string hexString = XML.getValue("color", "ee1b12", i );
+                    int hexInt = ofHexToInt( hexString );
+                    
+                    ofColor color;
+                    color.setHex( hexInt );
+                    newScheme.push_back(color);
+                }
+                
+                schemes.push_back( newScheme );
+                XML.popTag();
             }
+        }
+    }
+}
+
+void ColorPalette::setScheme(unsigned int _nId){
+    if (_nId < schemes.size()){
+        
+        if (_nId != nScheme){
+            nScheme = _nId;
+            clear();
         }
     }
 }
@@ -73,18 +100,22 @@ bool ColorPalette::getVisible(){
     }
 }
 
-float ColorPalette::getY(){
+float ColorPalette::getOffset(){
     float yPct = powf(pct, shp);
-    return yPct * height;
+
+    return yPct * maxOffSet;    
 }
 
 void ColorPalette::update(){
-    if ( width != ofGetWindowWidth()){
+    if ( ( height != ofGetWindowHeight() ) || ( width != ofGetWindowWidth() ) ) {
         bSetup = false;
     }
     
     if (!bSetup){
+        
+        height = ofGetWindowHeight();
         width = ofGetWindowWidth();
+            
         allocate(width, height);
         pct = 0.0f;
         
@@ -106,20 +137,38 @@ void ColorPalette::update(){
 
 bool ColorPalette::checkColor(ofPoint _pos, ofColor& _color){
     bool overSomething = false;
-    if ( _pos.y < getY() ){
-        
-        if (( _pos.x > margins ) && (_pos.x < width-margins)){
-        
-            float totalWidth = width-margins*2.0;
-            float elementWidth = totalWidth/colors.size();
+    
+    if (bVertical) {
+        if ( _pos.x < getOffset() ){
             
-            int index = (_pos.x-margins)/elementWidth;
-            
-            _color = colors[index];
-            
-            overSomething = true;
+            if (( _pos.y > margins ) && (_pos.y < height-margins)){
+                
+                float totalHeight = height-margins*2.0;
+                float elementHeight = totalHeight/schemes[nScheme].size();
+                
+                int index = (_pos.y-margins)/elementHeight;
+                
+                _color = schemes[nScheme][index];
+                
+                overSomething = true;
+            }
         }
-    } 
+    } else {
+        if ( _pos.y < getOffset() ){
+            
+            if (( _pos.x > margins ) && (_pos.x < width-margins)){
+                
+                float totalWidth = width-margins*2.0;
+                float elementWidth = totalWidth/schemes[nScheme].size();
+                
+                int index = (_pos.x-margins)/elementWidth;
+                
+                _color = schemes[nScheme][index];
+                
+                overSomething = true;
+            }
+        }
+    }
     
     setVisible(false);
     return overSomething;
@@ -133,23 +182,42 @@ void ColorPalette::clear(){
     begin();
     ofClear(0,0);
 
-    float totalWidth = width-margins*2.0;
-    float elementWidth = totalWidth/colors.size();
-    float x = margins+elementWidth*0.5;
+    if (bVertical){
+        
+        float totalHeight = height-margins*2.0;
+        float elementHeight = totalHeight/schemes[nScheme].size();
+        float y = margins+elementHeight*0.5;
+        
+        for (int i = 0; i < schemes[nScheme].size(); i++){
+            ofSetColor( schemes[nScheme][i] );
+            int imageIndex = i%images.size();
+            images[imageIndex].setAnchorPercent(0.5, 0.5);
+            images[imageIndex].draw(maxOffSet*0.5,y);
     
-    for (int i = 0; i < colors.size(); i++){
-        ofSetColor( colors[i] );
-        int imageIndex = i%images.size();
-        images[imageIndex].setAnchorPercent(0.5, 0.5);
-        images[imageIndex].draw(x,height*0.5);
+            y += elementHeight;
+        }
         
-//        ofSetColor(255);
-//        int imageTopIndex = i%imagesTop.size();
-//        imagesTop[imageTopIndex].setAnchorPercent(0.5, 0.5);
-//        imagesTop[imageTopIndex].draw(x,height*0.5);
+    } else {
         
-        x += elementWidth;
+        float totalWidth = width-margins*2.0;
+        float elementWidth = totalWidth/schemes[nScheme].size();
+        float x = margins+elementWidth*0.5;
+        
+        for (int i = 0; i < schemes[nScheme].size(); i++){
+            ofSetColor( schemes[nScheme][i] );
+            int imageIndex = i%images.size();
+            images[imageIndex].setAnchorPercent(0.5, 0.5);
+            images[imageIndex].draw(x,maxOffSet*0.5);
+            
+            //        ofSetColor(255);
+            //        int imageTopIndex = i%imagesTop.size();
+            //        imagesTop[imageTopIndex].setAnchorPercent(0.5, 0.5);
+            //        imagesTop[imageTopIndex].draw(x,height*0.5);
+            
+            x += elementWidth;
+        }
     }
+    
     
     end();
     ofPopStyle();
@@ -157,7 +225,13 @@ void ColorPalette::clear(){
 
 void ColorPalette::draw(){
     if ( pct > 0.0 ){
-        background.draw(0, -background.getHeight() + getY());
-        ofFbo::draw(0, -height + getY());
+        if (bVertical){
+            background.draw(-background.getWidth() + getOffset(),0);
+            ofFbo::draw(-maxOffSet + getOffset(), 0);
+        } else {
+            background.draw(0, -background.getHeight() + getOffset());
+            ofFbo::draw(0, -maxOffSet + getOffset());
+        }
+        
     }
 }

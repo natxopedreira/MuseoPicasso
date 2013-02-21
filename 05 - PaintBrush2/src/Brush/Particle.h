@@ -26,6 +26,7 @@ public:
     void    update();
     void    draw();
 
+    float   alphaThreshold;
     float   damping;
     float   size;
     

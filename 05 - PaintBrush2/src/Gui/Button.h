@@ -19,6 +19,7 @@ public:
     
     ofEvent<int>   clickPressed;
     
+    int     nId;
 private:
     ofImage image;
     

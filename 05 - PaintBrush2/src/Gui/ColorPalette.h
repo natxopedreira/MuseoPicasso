@@ -18,17 +18,21 @@ public:
     ColorPalette();
     
     bool        loadPalette(string _sFile);
+    void        setScheme(unsigned int _nId);
     void        setVisible(bool _bvisible);
     void        toggleVisible();
     
     void        clear();
     
     bool        getVisible();
-    float       getY();
+    float       getOffset();
     bool        checkColor(ofPoint _pos, ofColor& _color);
     
     void        update();
     void        draw();
+    
+    int         maxOffSet;
+    bool        bVertical;
     
 private:
     
@@ -36,7 +40,9 @@ private:
     
     vector<ofImage> images;
     vector<ofImage> imagesTop;
-    vector<ofColor> colors;
+    
+    vector< vector<ofColor> > schemes;
+    
     float           pct, inc, shp;
     float           margins;
     
@@ -44,6 +50,7 @@ private:
     bool            bVisible;
     
     int             width,height,element_offset;
+    int             nScheme;
     bool            bChange;
 };
 

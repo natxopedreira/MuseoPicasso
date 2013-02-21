@@ -59,13 +59,15 @@ public:
     ofxFloatSlider  lineWidth;
     ofxFloatSlider  colorLerp;
     ofxFloatSlider  colorRandom;
+    ofxFloatSlider  alphaThreshold;
 
     vector<Brush*>  brushes;
     ofFbo           canvas;
     
     ColorPalette    palette;
     
-    SimpleBtn       paletteBtn;
+    SimpleBtn       paletteProfBtn;
+    SimpleBtn       paletteLandBtn;
     SimpleBtn       cleanBtn;
 
     ofColor         color;
