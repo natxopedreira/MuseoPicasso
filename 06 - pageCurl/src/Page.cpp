@@ -12,8 +12,8 @@
 Page::Page(){
     meshDefinition = 20;
     
-    A = NULL;
-    B = NULL;
+    front = NULL;
+    back = NULL;
 }
 
 float Page::getTransition(){
@@ -27,15 +27,16 @@ void Page::setHandAt(ofPoint _hand, float lerpPct){
         bChange = true;
     } else {
         
-        if ( (hand != ofPoint(1.0,1.0)) && ( hand != ofPoint(0.0,0.0))){
+        if ( (hand != ofPoint(1.0,1.0)) && ( hand != ofPoint(0.0,0.5))){
         
             if (hand.x >= 0.5){
                 hand.x = ofLerp(hand.x, 1.0, lerpPct);
+                hand.y = ofLerp(hand.y, 1.0, lerpPct);
             } else {
                 hand.x = ofLerp(hand.x, 0.0, lerpPct);
+                hand.y = ofLerp(hand.y, 0.5, lerpPct);
             }
             
-            hand.y = ofLerp(hand.y, 1.0, lerpPct);
             bChange = true;
         }
         
@@ -43,13 +44,11 @@ void Page::setHandAt(ofPoint _hand, float lerpPct){
 }
 
 void Page::setNormHandAt(ofPoint _hand, float lerpPct){
-    
     if ( hand != _hand ){
         hand.x = ofLerp(hand.x, _hand.x, lerpPct );
         hand.y = ofLerp(hand.y, _hand.y, lerpPct );
         bChange = true;
     }
-    
 }
 
 void Page::update(){
@@ -73,7 +72,7 @@ void Page::update(){
             theta = STRAIGHT_LINE(0.3333f, 45.0f, 0.1666f,  25.0f, hand.x);
             ay =    STRAIGHT_LINE(0.3333f, -10.0f, 0.1666f, -30.0f, hand.x);
             angle = STRAIGHT_LINE(0.3333f, 35.0f, 0.1666f,  60.0f, hand.x);
-        } else {
+        } else {            
             theta = STRAIGHT_LINE(0.1666f, 25.0f,    0.0f,  20.0f, hand.x);
             ay =    STRAIGHT_LINE(0.1666f, -30.0f,   0.0f, -40.0f, hand.x);
             angle = STRAIGHT_LINE(0.1666f, 60.0f,    0.0f,  95.0f, hand.x);
@@ -119,6 +118,8 @@ void Page::update(){
         mesh.clear();
         mesh.setMode(OF_PRIMITIVE_TRIANGLES);
         
+        //  FRONT
+        //
         for(int j = 0; j < height; j += meshDefinition) {
             for(int i = 0; i < width; i += meshDefinition) {
                 
@@ -147,7 +148,7 @@ void Page::update(){
     }
 }
 
-ofPoint Page::getCurlPos(ofPoint pos){
+ofPoint Page::getCurlPos(ofPoint pos , float _zOffset ){
     
     // Be careful with units here. "pos" range from [0, COLS] & [0, ROWS] which are just the vertex indices.
     // 'ay' is in the coordinate system of the vertex indices. The actual values of the vertices are in
@@ -181,7 +182,7 @@ ofPoint Page::getCurlPos(ofPoint pos){
     //
     ofPoint cylPos(pos);
     {
-        float beta = cylPos.x / cylRadius;
+        float beta = cylPos.x / (cylRadius + _zOffset );
         
         // Rotate (0,0,0) by beta around line given by x = 0, z = cylRadius.
         // aka Rotate (0,0,-cylRadius) by beta, then add cylRadius back to z coordinate
@@ -238,24 +239,26 @@ void Page::draw(bool _bDebug){
         ofPushStyle();
     
         ofTranslate(x, y);
-    
-        if (A != NULL)
-            A->bind();
-        
-        ofSetColor(ofFloatColor(1.0));//,getTransition()));
+
+        front->bind();
+        ofSetColor(ofFloatColor(1.0,getTransition()));
         mesh.draw();
+        front->unbind();
         
-        if (A != NULL)
-            A->unbind();
+        float pct = ofMap(getTransition(),0.0,0.1,1.0,0.0);
+        ofSetColor(ofFloatColor(1.0, pct ) );
+        ofRectangle backSide(*this);
+        ofPoint centerRight = getCurlPos( ofPoint(width,height*0.5) );
+        backSide.x = ofMap(centerRight.x,-0.0,-300,0,-this->width,true);
+        backSide.y = 0;
+        backSide.width = abs(backSide.x);
         
-        if (B !=NULL){
+        if (back !=NULL){
     
-            ofSetColor(ofFloatColor(1.0, ofMap(getTransition(),0.0,0.1,1.0,0.0) ) );
-            ofRectangle bSide(*this);
-            bSide.x = -width;
-            bSide.y = 0;
-            B->draw(bSide);
-            
+            back->draw(backSide);
+        } else {
+            ofSetColor(255);
+            ofRect(backSide);
         }
         
         ofPopStyle();
@@ -282,6 +285,7 @@ void Page::draw(bool _bDebug){
         ofCircle(x+hand.x*width, y+hand.y*height, 10);
         
         ofNoFill();
+        
         ofSetColor(0,0,255);
         ofRect(*this);
         

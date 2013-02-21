@@ -36,15 +36,15 @@ public:
     void    update();
     void    draw(bool _bDebug = false);
     
-    ofTexture* A;
-    ofTexture* B;
+    ofTexture *front;
+    ofTexture *back;
     
     int     meshDefinition;
     
 private:
     void    addFace(ofMesh& _mesh, vectorFace &_face);
     void    addFace(ofMesh& _mesh, ofPoint _a, ofPoint _b, ofPoint _c);
-    ofPoint getCurlPos(ofPoint pos);
+    ofPoint getCurlPos(ofPoint pos, float _zOffset = 0 );
 
     ofMesh  mesh;
     ofPoint hand;

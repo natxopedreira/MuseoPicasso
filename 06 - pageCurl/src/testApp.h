@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 
-#include "Page.h"
+#include "Book.h"
 
 //#define USE_TUIO
 #include "ofxOsc.h"
@@ -36,8 +36,5 @@ public:
     ofLight pointLight;
     ofMaterial material;
     
-    ofImage imgA;
-    ofImage imgB;
-    
-	Page page;
+    Book    book;
 };

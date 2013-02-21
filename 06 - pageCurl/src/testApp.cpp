@@ -19,16 +19,8 @@ void testApp::setup(){
 	material.setShininess(64);
 	material.setSpecularColor(ofFloatColor(1.0, 1.0, 1.0));
     
-    
-    imgA.loadImage("00.jpeg");
-    imgB.loadImage("01.jpeg");
-    
-    int width = imgA.getWidth();
-    int height = imgB.getHeight();
-    page.set(ofGetWidth()*0.5, ofGetHeight()*0.5-height*0.5, width, height);
-    page.A = &(imgA.getTextureReference());
-    page.B = &(imgB.getTextureReference());
-    
+    book.loadDirectory("pages");
+    book.setPosition(ofPoint(ofGetWidth()*0.5, ofGetHeight()*0.5));
 }
 
 //--------------------------------------------------------------
@@ -36,10 +28,10 @@ void testApp::update(){
     tuioClient.getMessage();
     
 #ifndef USE_TUIO
-    page.setHandAt(ofPoint(mouseX, mouseY));
+    book.hand = ofPoint(mouseX, mouseY);
 #endif
     
-    page.update();
+    book.update();
 }
 
 //--------------------------------------------------------------
@@ -47,7 +39,6 @@ void testApp::draw(){
     ofBackgroundGradient(ofColor::gray, ofColor::black);
     
     if (ofGetKeyPressed()){
-        page.draw(true);
         tuioClient.drawCursors();
     }
     
@@ -64,21 +55,24 @@ void testApp::draw(){
     glEnable(GL_SMOOTH);
 	glShadeModel(GL_SMOOTH);
     
-    page.draw();
+    book.draw( ofGetKeyPressed() );
     
     material.end();
     ofDisableLighting();
     
 	glDisable(GL_NORMALIZE);
     glDisable(GL_DEPTH_TEST);
-    
-    
-    
 }
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
-
+    if (key == OF_KEY_RIGHT) {
+        book.setNext();
+    } else if ( key == OF_KEY_LEFT){
+        book.setPrev();
+    } else if ( key == 'f' ){
+        ofToggleFullscreen();
+    }
 }
 
 //--------------------------------------------------------------
@@ -120,8 +114,7 @@ void testApp::_tuioUpdated(ofxTuioCursor &tuioCursor){
                           0.0);
     
 #ifdef USE_TUIO
-//    page.setNormHandAt(ofPoint(tuioCursor.getX(),tuioCursor.getY()));
-    page.setHandAt(loc);
+    book.hand = loc;
 #endif
     
 }
@@ -135,7 +128,7 @@ void testApp::_tuioRemoved(ofxTuioCursor & tuioCursor){
 
 //--------------------------------------------------------------
 void testApp::windowResized(int w, int h){
-
+    book.setPosition(ofPoint(w*0.5, h*0.5));
 }
 
 //--------------------------------------------------------------
