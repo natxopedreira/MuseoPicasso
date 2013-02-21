@@ -1,10 +1,7 @@
 //
 //  Page.cpp
-//  FloatingPage
 //
-//  Created by Elie Zananiri on 2012-11-01.
-//
-//
+
 
 #include "Page.h"
 
