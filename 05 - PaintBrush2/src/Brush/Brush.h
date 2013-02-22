@@ -31,6 +31,7 @@ public:
     
     void    set(int _x, int _y);
     void    set(ofPoint _pos);
+    void    set(int _x, int _y, int _w, int _h);
     
     ofPoint getVel();
     float   getAngle();

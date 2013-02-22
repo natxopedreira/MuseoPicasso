@@ -145,6 +145,17 @@ void Brush::set(int _x, int _y){
     set(ofPoint(_x,_y));
 }
 
+void Brush::set(int _x, int _y, int _w, int _h){
+    float relativeBrushWidth = (_w+_h)*0.5;
+    
+    // Changing blobs
+    //
+    float factor = 100;     // EDIT THIS TO ADJUST!!!
+    repRad = ofMap(brushWidth-relativeBrushWidth,0,factor,0,20,true);
+    
+    set(ofPoint(_x,_y));
+}
+
 void Brush::set(ofPoint _pos){
     
     if (bDown){
@@ -180,6 +191,8 @@ void Brush::set(ofPoint _pos){
         }
     }
 }
+
+
 
 ofPoint Brush::getVel(){
     if (tail.size() > 0)

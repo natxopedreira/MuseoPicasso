@@ -268,7 +268,10 @@ void testApp::_tuioAdded(TuioCursor & tuioCursor){
         
         Brush * newBrush = new Brush;
         newBrush->init(brushNumber);
-        newBrush->setBrushWidth(brushWidth);
+        
+        float relativeBrushWidth = (tuioCursor.getWidth()*ofGetWidth() + tuioCursor.getHeight()*ofGetHeight() ) * 0.5;
+        newBrush->setBrushWidth( relativeBrushWidth );
+        
         newBrush->setLineWidth(lineWidth);
         newBrush->setColor( color, colorRandom);
         newBrush->nId = tuioCursor.getFingerId();
@@ -294,7 +297,7 @@ void testApp::_tuioUpdated(TuioCursor &tuioCursor){
     
     for (int i = 0; i < brushes.size(); i++) {
         if (brushes[i]->nId == tuioCursor.getFingerId()){
-            brushes[i]->set(loc.x,loc.y);
+            brushes[i]->set(loc.x,loc.y, tuioCursor.getWidth()*ofGetWidth(), tuioCursor.getHeight()*ofGetHeight() );
             return;
         }
     }
@@ -307,7 +310,7 @@ void testApp::_tuioRemoved(TuioCursor & tuioCursor){
     
     for(int i = brushes.size()-1; i >= 0 ; i--){
         if (brushes[i]->nId == tuioCursor.getFingerId()){
-            brushes[i]->set(loc.x,loc.y);
+            brushes[i]->set(loc.x,loc.y, tuioCursor.getWidth()*ofGetWidth(), tuioCursor.getHeight()*ofGetHeight() );
             brushes[i]->end();
             
             delete brushes[i];
