@@ -5,7 +5,6 @@
 #include "ofMain.h"
 
 #include "ofxGui.h"
-#include "ofxFX.h"
 
 #include "Brush.h"
 #include "ColorPalette.h"
