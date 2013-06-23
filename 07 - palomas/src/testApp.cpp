@@ -224,7 +224,7 @@ void testApp::keyPressed(int key){
 //--------------------------------------------------------------
 void testApp::initGui(){
 
-    gui = new ofxUISuperCanvas("DOVE HUNTER", 100, 100, 340, 900 ,OFX_UI_FONT_MEDIUM);
+    gui = new ofxUISuperCanvas("PIKATXU'S DOVE DETECTOR", 100, 100, 340, 900 ,OFX_UI_FONT_MEDIUM);
     gui->setColorBack(ofColor(90,90,90));
     
     gui->addSpacer();
