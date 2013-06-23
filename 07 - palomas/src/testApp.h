@@ -4,6 +4,12 @@
 
 #include "ofxOpenCv.h"
 #include "DragRect.h"
+#include "ofxUI.h"
+
+enum estado{
+    APP_STATE_HUNTER,
+    APP_STATE_PHOVIEWER
+};
 
 class testApp : public ofBaseApp{
 public:
@@ -20,6 +26,8 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
+    
+    void exit();
 	
     ofVideoGrabber			video;
     ofxCvColorImage			videoColorCvImage;
@@ -32,9 +40,30 @@ public:
     DragRect                area;
     
     float                   nChange, nToFly;
+
     
-    int                     threshold;
+    float                     threshold;
     int                     width, height;
     
     bool                    bDebug, bToFly;
+    
+    // -- natxo
+    
+    ofVideoPlayer   photoViewer;
+    estado  aplicacionEnCurso;
+    void        updateStateHunter();
+    
+    
+    /// --- gui
+    ofxUISuperCanvas    * gui;
+    void guiEvent(ofxUIEventArgs &e);
+    
+    float                   mapInMin,mapInMax,mapOutMax,mapOutMin;
+    ofImage     diffMov,videoGui;
+    ofFbo       videoAreaGui;
+    void        initGui();
+    
+    float       horaInicio, horaFin;
+    
+    ofPoint     areaSupIzda, areaInfDcha;
 };

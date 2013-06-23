@@ -23,6 +23,8 @@ public:
     
     bool    bEditMode;
     string  objName;
+    
+    
 
 protected:
     void    _mouseDragged(ofMouseEventArgs &e);

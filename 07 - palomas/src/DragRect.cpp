@@ -14,9 +14,9 @@ DragRect::DragRect(){
     
     //  Eventos de Mouse
     //
-    ofAddListener(ofEvents().mouseDragged, this, &DragRect::_mouseDragged);
-    ofAddListener(ofEvents().mouseReleased, this, &DragRect::_mouseReleased);
-    ofAddListener(ofEvents().draw, this, &DragRect::_draw);
+    //ofAddListener(ofEvents().mouseDragged, this, &DragRect::_mouseDragged);
+    //ofAddListener(ofEvents().mouseReleased, this, &DragRect::_mouseReleased);
+    //ofAddListener(ofEvents().draw, this, &DragRect::_draw);
 }
 
 bool DragRect::loadSettings(string _fileConfig){
