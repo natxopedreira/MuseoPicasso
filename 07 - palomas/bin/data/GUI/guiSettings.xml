@@ -2,19 +2,19 @@
     <Kind>42</Kind>
     <Name>OFX_UI_WIDGET_CANVAS</Name>
     <IsMinified>0</IsMinified>
-    <XPosition>296.000000000</XPosition>
-    <YPosition>44.000000000</YPosition>
+    <XPosition>633.000000000</XPosition>
+    <YPosition>30.000000000</YPosition>
 </Canvas>
 <Widget>
     <Kind>6</Kind>
     <Name>rango horas pasafotos</Name>
-    <HighValue>18.000000000</HighValue>
-    <LowValue>12.000000000</LowValue>
+    <HighValue>12.361444473</HighValue>
+    <LowValue>10.048192978</LowValue>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>threshold</Name>
-    <Value>95.240959167</Value>
+    <Value>54.533130646</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -29,7 +29,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>mapInMax</Name>
-    <Value>5000.000000000</Value>
+    <Value>4969.879394531</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -39,7 +39,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>mapOutMax</Name>
-    <Value>3.000000000</Value>
+    <Value>3.012048244</Value>
 </Widget>
 <Widget>
     <Kind>11</Kind>

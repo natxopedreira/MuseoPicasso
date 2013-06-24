@@ -251,7 +251,7 @@ void testApp::initGui(){
     
     gui->addSpacer();
     gui->addLabel("movimiento");
-    gui->addValuePlotter("movimiento", 100, mapOutMin, mapOutMax, &nChange, 30);
+    gui->addValuePlotter("movimiento", 340, mapOutMin, mapOutMax, &nChange, 30);
     ofAddListener(gui->newGUIEvent,this,&testApp::guiEvent);
 
     gui->setVisible(false);
@@ -271,6 +271,7 @@ void testApp::guiEvent(ofxUIEventArgs &e)
         
         ofxUI2DPad *pad = (ofxUI2DPad *) e.widget;
         area.init(areaSupIzda.x, areaSupIzda.y,pad->getScaledValue().x, pad->getScaledValue().y);
+        
     }
 }
 
