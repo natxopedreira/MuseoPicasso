@@ -20,10 +20,10 @@ void testApp::setup(){
     area.objName = "track";
     area.loadSettings();
     
-    pidginLoop.loadMovie("01.mov");
+    pidginLoop.loadMovie("paloma_loop.mov");
     pidginLoop.play();
     
-    pidginFly.loadMovie("02.mov");
+    pidginFly.loadMovie("paloma_vuela.mov");
     
     photoViewer.loadMovie("03.mov");
     
@@ -130,16 +130,15 @@ void testApp::draw(){
     switch (aplicacionEnCurso) {
         case APP_STATE_HUNTER:
             
-            ofPushMatrix();
-            ofTranslate(ofGetWidth()*0.5, ofGetHeight()*0.5);
+           
             
             ofSetColor(255);
             if (pidginFly.isPlaying()){
-                pidginFly.draw(-pidginFly.getWidth()*0.5,-pidginFly.getHeight()*0.5);
+                pidginFly.draw(0,0);
             } else {
-                pidginLoop.draw(-pidginLoop.getWidth()*0.5,-pidginLoop.getHeight()*0.5);
+                pidginLoop.draw(0,0);
             }
-            ofPopMatrix();
+
             
             
             
@@ -173,6 +172,7 @@ void testApp::updateStateHunter(){
         
         if (!pidginFly.isPlaying() && nChange >= nToFly){
             pidginFly.play();
+            //cout << "vuelaaaaa" << endl;
         }
         
         if(bDebug){
