@@ -20,10 +20,10 @@ void testApp::setup(){
     area.objName = "track";
     area.loadSettings();
     
-    pidginLoop.loadMovie("paloma_loop.mov");
+    pidginLoop.loadMovie("quietas.mp4");
     pidginLoop.play();
     
-    pidginFly.loadMovie("paloma_vuela.mov");
+    pidginFly.loadMovie("vuela.mp4");
     
     photoViewer.loadMovie("03.mov");
     
